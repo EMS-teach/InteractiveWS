@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal EMS Career Pathway Map</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        .pathway-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        .milestone {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #667eea;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .milestone:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+        
+        .milestone-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .milestone-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        
+        .milestone-title {
+            color: #667eea;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .input-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        
+        .timeline-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .connection-line {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .connection-line::before {
+            content: "↓";
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .save-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin-top: 30px;
+            width: 100%;
+        }
+        
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tips h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .tips ul {
+            margin-bottom: 0;
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-input {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ Personal EMS Career Pathway Map</h1>
+            <p style="font-size: 1.2em; color: #666;">Map your journey from EMT student to EMS professional</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions</h3>
+            <p><strong>Time:</strong> 20 minutes individual work</p>
+            <p>Create a detailed career pathway map showing your planned progression from current EMT student to your long-term EMS career goals. Think about realistic timelines and how EMS knowledge will enhance ANY career path you choose.</p>
+            
+            <h4>💾 How to Save & Submit:</h4>
+            <ol style="margin-left: 20px;">
+                <li><strong>Complete all sections</strong> of your career pathway map</li>
+                <li><strong>Click "Save My Career Pathway Map"</strong> button at the bottom</li>
+                <li><strong>Download will start automatically</strong> - save the .txt file to your device</li>
+                <li><strong>Go to Canvas assignment</strong> and upload your downloaded file</li>
+                <li><strong>Alternative:</strong> Copy the text content and paste into Canvas text entry box</li>
+            </ol>
+            
+            <div style="background: #e8f4fd; border: 1px solid #bee5eb; border-radius: 5px; padding: 10px; margin-top: 10px;">
+                <strong>📱 Tech Tip:</strong> Your work auto-saves as you type, so you won't lose progress if something happens!
+            </div>
+        </div>
+        
+        <div class="tips">
+            <h4>💡 Pro Tips</h4>
+            <ul>
+                <li>Be realistic with your timelines - EMS advancement takes time and dedication</li>
+                <li>Consider how EMS skills apply to other careers (business, education, public service)</li>
+                <li>Research actual education requirements and costs in your area</li>
+                <li>Think about work-life balance and family considerations</li>
+            </ul>
+        </div>
+        
+        <form id="careerPathwayForm">
+            <div class="pathway-container">
+                
+                <!-- Current Position -->
+                <div class="milestone">
+                    <div class="milestone-header">
+                        <div class="milestone-number">1</div>
+                        <h3 class="milestone-title">Current Position</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="current-status">Current Status:</label>
+                        <input type="text" id="current-status" value="High School EMT Student" readonly style="background-color: #f8f9ff;">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="current-skills">Skills/Knowledge I'm Gaining Now:</label>
+                        <textarea id="current-skills" placeholder="List the EMT skills and knowledge you're learning in this program..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="graduation-date">Expected Graduation Date:</label>
+                        <input type="month" id="graduation-date">
+                    </div>
+                </div>
+                
+                <div class="connection-line"></div>
+                
+                <!-- Next Step -->
+                <div class="milestone">
+                    <div class="milestone-header">
+                        <div class="milestone-number">2</div>
+                        <h3 class="milestone-title">Next Step (1-2 Years)</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="next-goal">Primary Goal:</label>
+                        <select id="next-goal">
+                            <option value="">Select your next step...</option>
+                            <option value="emt-certification">EMT Certification & First Job</option>
+                            <option value="college-ems">College + Part-time EMS</option>
+                            <option value="other-career">Other Career + EMS Knowledge</option>
+                            <option value="military-ems">Military with EMS Background</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="first-job">Target First Job/Position:</label>
+                        <input type="text" id="first-job" placeholder="e.g., EMT at local ambulance service, college student, etc.">
+                    </div>
+                    
+                    <div class="timeline-input">
+                        <div class="input-group">
+                            <label for="next-start">Start Date:</label>
+                            <input type="month" id="next-start">
+                        </div>
+                        <div class="input-group">
+                            <label for="next-location">Location:</label>
+                            <input type="text" id="next-location" placeholder="City, State">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="next-education">Education/Certification Needed:</label>
+                        <textarea id="next-education" placeholder="What additional training, certifications, or education do you need?"></textarea>
+                    </div>
+                </div>
+                
+                <div class="connection-line"></div>
+                
+                <!-- Medium Term -->
+                <div class="milestone">
+                    <div class="milestone-header">
+                        <div class="milestone-number">3</div>
+                        <h3 class="milestone-title">Medium Term (3-7 Years)</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="medium-goal">Career Goal:</label>
+                        <select id="medium-goal">
+                            <option value="">Select your medium-term goal...</option>
+                            <option value="aemt">Advanced EMT (AEMT)</option>
+                            <option value="paramedic">Paramedic</option>
+                            <option value="healthcare">Other Healthcare Career</option>
+                            <option value="education">Teaching/Training</option>
+                            <option value="management">EMS Management/Supervisor</option>
+                            <option value="business">Business/Corporate (using EMS skills)</option>
+                            <option value="public-service">Public Service/Government</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="medium-position">Target Position:</label>
+                        <input type="text" id="medium-position" placeholder="Specific job title or role you want">
+                    </div>
+                    
+                    <div class="timeline-input">
+                        <div class="input-group">
+                            <label for="medium-timeline">Target Date:</label>
+                            <input type="month" id="medium-timeline">
+                        </div>
+                        <div class="input-group">
+                            <label for="medium-salary">Expected Salary Range:</label>
+                            <input type="text" id="medium-salary" placeholder="e.g., $45,000-$55,000">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="medium-education">Education/Training Required:</label>
+                        <textarea id="medium-education" placeholder="What additional schooling, certifications, or training will you need?"></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ems-connection">How EMS Knowledge Helps This Goal:</label>
+                        <textarea id="ems-connection" placeholder="Explain how your EMS training enhances this career path..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="connection-line"></div>
+                
+                <!-- Long Term -->
+                <div class="milestone">
+                    <div class="milestone-header">
+                        <div class="milestone-number">4</div>
+                        <h3 class="milestone-title">Long Term (8+ Years)</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="longterm-vision">Ultimate Career Vision:</label>
+                        <textarea id="longterm-vision" placeholder="Where do you see yourself in 10-15 years? What kind of leader/professional do you want to be?"></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="specializations">Specializations/Leadership Roles:</label>
+                        <textarea id="specializations" placeholder="e.g., Flight Paramedic, EMS Director, Healthcare Executive, Business Owner, etc."></textarea>
+                    </div>
+                    
+                    <div class="timeline-input">
+                        <div class="input-group">
+                            <label for="longterm-timeline">Target Achievement Date:</label>
+                            <input type="number" id="longterm-timeline" min="2030" max="2050" placeholder="Year">
+                        </div>
+                        <div class="input-group">
+                            <label for="longterm-impact">Community Impact Goal:</label>
+                            <input type="text" id="longterm-impact" placeholder="How will you serve your community?">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="continuing-education">Ongoing Education Plan:</label>
+                        <textarea id="continuing-education" placeholder="How will you stay current and continue growing throughout your career?"></textarea>
+                    </div>
+                </div>
+                
+                <div class="connection-line"></div>
+                
+                <!-- Reflection -->
+                <div class="milestone" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    <div class="milestone-header">
+                        <div class="milestone-number" style="background: #ff6b6b;">💭</div>
+                        <h3 class="milestone-title" style="color: #d63031;">Personal Reflection</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="life-value">Why is EMS knowledge valuable regardless of my career path?</label>
+                        <textarea id="life-value" placeholder="How will emergency preparedness, healthcare knowledge, and crisis management skills benefit you in ANY profession?"></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="family-impact">How will this pathway fit with my family/personal life goals?</label>
+                        <textarea id="family-impact" placeholder="Consider work-life balance, family time, geographic preferences, etc."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="biggest-challenge">What's my biggest potential challenge, and how will I overcome it?</label>
+                        <textarea id="biggest-challenge" placeholder="Be honest about obstacles and create a plan to address them..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" class="save-button" onclick="savePathway()">
+                💾 Save My Career Pathway Map
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function savePathway() {
+            // Collect all form data
+            const formData = new FormData(document.getElementById('careerPathwayForm'));
+            const pathwayData = {};
+            
+            // Get all inputs, textareas, and selects
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.id) {
+                    pathwayData[input.id] = input.value;
+                }
+            });
+            
+            // Create a formatted summary
+            let summary = "🗺️ MY EMS CAREER PATHWAY MAP\n";
+            summary += "=" * 50 + "\n\n";
+            
+            summary += "📍 CURRENT POSITION:\n";
+            summary += `Status: ${pathwayData['current-status'] || 'High School EMT Student'}\n`;
+            summary += `Skills: ${pathwayData['current-skills'] || 'Not specified'}\n`;
+            summary += `Graduation: ${pathwayData['graduation-date'] || 'Not specified'}\n\n`;
+            
+            summary += "🎯 NEXT STEP (1-2 Years):\n";
+            summary += `Goal: ${pathwayData['next-goal'] || 'Not specified'}\n`;
+            summary += `First Job: ${pathwayData['first-job'] || 'Not specified'}\n`;
+            summary += `Start Date: ${pathwayData['next-start'] || 'Not specified'}\n`;
+            summary += `Location: ${pathwayData['next-location'] || 'Not specified'}\n`;
+            summary += `Education Needed: ${pathwayData['next-education'] || 'Not specified'}\n\n`;
+            
+            summary += "📈 MEDIUM TERM (3-7 Years):\n";
+            summary += `Career Goal: ${pathwayData['medium-goal'] || 'Not specified'}\n`;
+            summary += `Target Position: ${pathwayData['medium-position'] || 'Not specified'}\n`;
+            summary += `Target Date: ${pathwayData['medium-timeline'] || 'Not specified'}\n`;
+            summary += `Expected Salary: ${pathwayData['medium-salary'] || 'Not specified'}\n`;
+            summary += `Education Required: ${pathwayData['medium-education'] || 'Not specified'}\n`;
+            summary += `EMS Connection: ${pathwayData['ems-connection'] || 'Not specified'}\n\n`;
+            
+            summary += "🚀 LONG TERM (8+ Years):\n";
+            summary += `Ultimate Vision: ${pathwayData['longterm-vision'] || 'Not specified'}\n`;
+            summary += `Specializations: ${pathwayData['specializations'] || 'Not specified'}\n`;
+            summary += `Target Year: ${pathwayData['longterm-timeline'] || 'Not specified'}\n`;
+            summary += `Community Impact: ${pathwayData['longterm-impact'] || 'Not specified'}\n`;
+            summary += `Continuing Education: ${pathwayData['continuing-education'] || 'Not specified'}\n\n`;
+            
+            summary += "💭 REFLECTION:\n";
+            summary += `Life Value: ${pathwayData['life-value'] || 'Not specified'}\n`;
+            summary += `Family Impact: ${pathwayData['family-impact'] || 'Not specified'}\n`;
+            summary += `Biggest Challenge: ${pathwayData['biggest-challenge'] || 'Not specified'}\n\n`;
+            
+            summary += "Created: " + new Date().toLocaleDateString() + "\n";
+            
+            // Save to browser's local storage
+            localStorage.setItem('emsCareerPathway', JSON.stringify(pathwayData));
+            localStorage.setItem('emsCareerSummary', summary);
+            
+            // Create downloadable file
+            const blob = new Blob([summary], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'My_EMS_Career_Pathway_Map.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            alert('✅ Career Pathway Map saved successfully!\n\nYour map has been:\n• Saved to your browser\n• Downloaded as a text file\n\nYou can now submit this to Canvas or share it during the gallery walk!');
+        }
+        
+        // Load saved data if it exists
+        window.onload = function() {
+            const savedData = localStorage.getItem('emsCareerPathway');
+            if (savedData) {
+                const pathwayData = JSON.parse(savedData);
+                Object.keys(pathwayData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = pathwayData[key];
+                    }
+                });
+            }
+        };
+    </script>
+</body>
+</html>
