@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS 210 - Week 1 Interactive Scenario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .score-bar {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .intro-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-screen h2 {
+            color: #2a5298;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .intro-screen p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .scenario-box h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2a5298;
+        }
+        
+        .question-number {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover {
+            border-color: #2a5298;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .option-letter {
+            background: #2a5298;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            pointer-events: none;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            pointer-events: none;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .certificate {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .certificate.show {
+            display: block;
+        }
+        
+        .certificate-border {
+            border: 8px double #2a5298;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .certificate h2 {
+            color: #2a5298;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: Georgia, serif;
+        }
+        
+        .certificate-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #495057;
+            margin: 20px 0;
+        }
+        
+        .certificate-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2a5298;
+            margin: 30px 0;
+            padding: 10px;
+            border-bottom: 2px solid #2a5298;
+            display: inline-block;
+        }
+        
+        .certificate-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 30px 0;
+        }
+        
+        .certificate-date {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            margin-top: 30px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2a5298 0%, #667eea 100%);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EMS 210 - Week 1 Interactive Scenario</h1>
+            <p>Transport Operations & Incident Management</p>
+            <p>Chapters 47 & 48</p>
+        </div>
+        
+        <div class="score-bar">
+            <div class="score-item">
+                <div class="score-label">Progress</div>
+                <div class="score-value" id="progress">0/50</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0%</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Intro Screen -->
+            <div id="intro" class="intro-screen">
+                <h2>Welcome, Paramedic</h2>
+                <p>You are about to engage in a comprehensive review of transport operations and incident management. This interactive scenario contains 50 questions based on real-world operational situations.</p>
+                
+                <div class="scenario-box">
+                    <h3>Instructions</h3>
+                    <p><strong>• Answer all 50 multiple-choice questions</strong></p>
+                    <p><strong>• Immediate feedback will be provided for each answer</strong></p>
+                    <p><strong>• Your final score will be calculated at the end</strong></p>
+                    <p><strong>• A completion certificate will be generated for Canvas submission</strong></p>
+                </div>
+                
+                <label for="studentName" style="display: block; margin-top: 30px; font-weight: 600; color: #2a5298;">Enter Your Name:</label>
+                <input type="text" id="studentName" class="name-input" placeholder="First and Last Name" required>
+                
+                <div class="btn-container">
+                    <button class="btn" onclick="startScenario()">Begin Scenario</button>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div id="progressBar" class="progress-bar" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            
+            <!-- Questions Container -->
+            <div id="questionsContainer"></div>
+            
+            <!-- Certificate -->
+            <div id="certificate" class="certificate">
+                <div class="certificate-border">
+                    <h2>Certificate of Completion</h2>
+                    <p class="certificate-text">This certifies that</p>
+                    <div class="certificate-name" id="certName"></div>
+                    <p class="certificate-text">has successfully completed</p>
+                    <p class="certificate-text"><strong>EMS 210 - Week 1 Interactive Scenario</strong></p>
+                    <p class="certificate-text">Transport Operations & Incident Management</p>
+                    <div class="certificate-score" id="certScore"></div>
+                    <p class="certificate-date" id="certDate"></p>
+                    <button class="btn download-btn" onclick="downloadCertificate()">Download Certificate</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: #6c757d;">Upload this certificate to Canvas to receive credit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Chapter 47: Transport Operations Questions (1-25)
+            {
+                number: 1,
+                text: "You are performing a daily ambulance check. Which of the following is NOT a category of equipment that should be checked?",
+                options: [
+                    "Medical equipment",
+                    "Safety equipment",
+                    "Operations equipment",
+                    "Personal entertainment devices"
+                ],
+                correct: 3,
+                explanation: "The three categories of equipment to check are medical equipment, safety equipment, and operations equipment. Personal entertainment devices are not part of the vehicle inspection checklist."
+            },
+            {
+                number: 2,
+                text: "What does the sterile cockpit concept refer to in EMS operations?",
+                options: [
+                    "Maintaining infection control in the ambulance",
+                    "All attention placed on crew safety during response and transport",
+                    "Cleaning the driver's compartment daily",
+                    "Using disposable steering wheel covers"
+                ],
+                correct: 1,
+                explanation: "The sterile cockpit concept means all attention is placed on the safety of the crew and surroundings during response to calls and during patient transport, similar to aviation practices during takeoff and landing."
+            },
+            {
+                number: 3,
+                text: "When should you fasten your seatbelt in the ambulance?",
+                options: [
+                    "Only when transporting code 3",
+                    "Before placing the vehicle in motion",
+                    "Only on the highway",
+                    "When the supervisor is present"
+                ],
+                correct: 1,
+                explanation: "Seatbelts and shoulder harnesses must be fastened before placing the vehicle in motion. This is a critical safety measure for all crew members."
+            },
+            {
+                number: 4,
+                text: "What is the primary risk of not securing equipment in the ambulance?",
+                options: [
+                    "Equipment may get dusty",
+                    "It violates infection control",
+                    "Objects can become lethal projectiles",
+                    "Insurance won't cover damage"
+                ],
+                correct: 2,
+                explanation: "Unsecured equipment, especially portable oxygen cylinders and diagnostic equipment, can become lethal projectiles during rapid driving or sudden stops."
+            },
+            {
+                number: 5,
+                text: "Upon arrival at a scene, what should be your FIRST action?",
+                options: [
+                    "Begin patient assessment",
+                    "Perform scene size-up and report to dispatch",
+                    "Set up the stretcher",
+                    "Request additional resources"
+                ],
+                correct: 1,
+                explanation: "Scene size-up should be performed first, followed by reporting to dispatch. This includes looking for safety hazards, evaluating need for additional units, and determining MOI or nature of illness."
+            },
+            {
+                number: 6,
+                text: "What is a 'peak load' in emergency vehicle operations?",
+                options: [
+                    "Maximum patient weight capacity",
+                    "Increased demand during certain hours",
+                    "The highest point on a response route",
+                    "Maximum fuel capacity"
+                ],
+                correct: 1,
+                explanation: "Peak loads refer to periods of increased demand during certain hours of the day. System status management uses this data to strategically deploy resources."
+            },
+            {
+                number: 7,
+                text: "What is the primary purpose of System Status Management (SSM)?",
+                options: [
+                    "Track employee work hours",
+                    "Maximize efficiency and reduce response time",
+                    "Calculate fuel consumption",
+                    "Schedule maintenance"
+                ],
+                correct: 1,
+                explanation: "SSM goals are to maximize efficiency and reduce response time by using data to determine emergency vehicle service demands and strategic deployment."
+            },
+            {
+                number: 8,
+                text: "Which of the following is a disadvantage of System Status Management?",
+                options: [
+                    "Increased response times",
+                    "Higher costs",
+                    "Takes toll on personnel with less downtime between calls",
+                    "Requires more vehicles"
+                ],
+                correct: 2,
+                explanation: "While SSM can improve efficiency, it can take a toll on personnel who have less downtime in between calls due to strategic positioning."
+            },
+            {
+                number: 9,
+                text: "You are responding code 3 (lights and siren). What is a critical consideration?",
+                options: [
+                    "Activating lights and siren guarantees right-of-way",
+                    "You must still drive safely; lights/siren don't ensure others will hear or understand",
+                    "Speed limits don't apply",
+                    "You can drive in any lane"
+                ],
+                correct: 1,
+                explanation: "Activating lights and siren does NOT ensure that you will be heard or understood by other drivers. Safe, defensive driving is always required."
+            },
+            {
+                number: 10,
+                text: "What should you do BEFORE responding to a call?",
+                options: [
+                    "Check social media",
+                    "Inform dispatch, confirm location, ask for available information",
+                    "Start driving immediately",
+                    "Call the patient directly"
+                ],
+                correct: 1,
+                explanation: "Before responding, inform dispatch your unit is responding, confirm nature and location of call, and ask for other available information."
+            },
+            {
+                number: 11,
+                text: "What are the phases of crew resource management (CRM) during a call?",
+                options: [
+                    "Response, treatment, transport",
+                    "Prebriefing en route, frequent check-ins on scene, reassessments",
+                    "Dispatch, arrival, departure",
+                    "Assessment, intervention, evaluation"
+                ],
+                correct: 1,
+                explanation: "CRM begins with prebriefing en route, continues with frequent check-ins and updates on scene, and includes reassessments and fine-tuning of the plan as necessary."
+            },
+            {
+                number: 12,
+                text: "After transporting a patient with a suspected infectious disease, what is your responsibility?",
+                options: [
+                    "Return to service immediately",
+                    "Clean and disinfect the vehicle and equipment",
+                    "Only wipe down visible surfaces",
+                    "Wait 24 hours before using the vehicle"
+                ],
+                correct: 1,
+                explanation: "After treating a patient with an infectious disease, you must properly clean and disinfect the emergency vehicle and all equipment to prevent transmission."
+            },
+            {
+                number: 13,
+                text: "What does Computer-Aided Dispatch (CAD) enable dispatchers to do?",
+                options: [
+                    "Drive the ambulance remotely",
+                    "View all call information and relay it to responding units",
+                    "Diagnose patient conditions",
+                    "Control traffic lights"
+                ],
+                correct: 1,
+                explanation: "CAD systems enable dispatchers to view all information about the call, including caller information, location, and details, which can be relayed to responding crews."
+            },
+            {
+                number: 14,
+                text: "When should you request air medical transport?",
+                options: [
+                    "For all trauma patients",
+                    "Based on criteria including distance, patient acuity, and scene conditions",
+                    "Only when ground transport is unavailable",
+                    "When the patient requests it"
+                ],
+                correct: 1,
+                explanation: "Air medical transport should be requested based on specific criteria including distance to appropriate facility, patient acuity, and scene conditions that may delay ground transport."
+            },
+            {
+                number: 15,
+                text: "What is the minimum safe distance for approaching a helicopter?",
+                options: [
+                    "25 feet",
+                    "50 feet",
+                    "100 feet",
+                    "Wait for crew to signal you forward"
+                ],
+                correct: 3,
+                explanation: "Never approach a helicopter until the crew signals you forward. Always approach from the front where the pilot can see you, never from the rear near the tail rotor."
+            },
+            {
+                number: 16,
+                text: "What direction should you NEVER approach a helicopter from?",
+                options: [
+                    "The front",
+                    "The sides",
+                    "The rear (tail rotor area)",
+                    "Any direction is safe"
+                ],
+                correct: 2,
+                explanation: "Never approach from the rear where the tail rotor is located. The tail rotor is extremely dangerous and often difficult to see when spinning."
+            },
+            {
+                number: 17,
+                text: "When preparing a helicopter landing zone (LZ), what size area is typically required?",
+                options: [
+                    "50 x 50 feet",
+                    "75 x 75 feet",
+                    "100 x 100 feet minimum",
+                    "200 x 200 feet"
+                ],
+                correct: 2,
+                explanation: "A landing zone should be at least 100 x 100 feet, clear of obstacles like power lines, trees, and loose debris that could be blown by rotor wash."
+            },
+            {
+                number: 18,
+                text: "What should you secure in the landing zone before the helicopter arrives?",
+                options: [
+                    "Vehicles only",
+                    "Loose debris, equipment, and anything that could become airborne",
+                    "Patients only",
+                    "Nothing needs to be secured"
+                ],
+                correct: 1,
+                explanation: "All loose debris, equipment, sheets, and anything that could become airborne from rotor wash must be secured before helicopter arrival."
+            },
+            {
+                number: 19,
+                text: "You arrive first at a multi-patient incident. What is your responsibility?",
+                options: [
+                    "Begin treating the first patient you see",
+                    "Estimate number of patients and report to dispatch",
+                    "Wait for additional units",
+                    "Transport the most critical patient immediately"
+                ],
+                correct: 1,
+                explanation: "If you are first on scene with multiple patients, estimate the number of patients and immediately report to dispatch to initiate appropriate response."
+            },
+            {
+                number: 20,
+                text: "What funding model involves taxpayer subsidies to lower fees for EMS services?",
+                options: [
+                    "Fee-for-service only",
+                    "Private insurance only",
+                    "Local government subsidies plus user fees",
+                    "Federal grants only"
+                ],
+                correct: 2,
+                explanation: "Some services receive taxpayer subsidies from local government to help lower fees. Some also offer annual subscription fees in exchange for free or reduced-cost services."
+            },
+            {
+                number: 21,
+                text: "What organization created the original paramedic curriculum?",
+                options: [
+                    "AHA",
+                    "NHTSA",
+                    "Dr. Nancy Caroline under DOT grant",
+                    "NREMT"
+                ],
+                correct: 2,
+                explanation: "Dr. Nancy Caroline, working with Dr. Peter Safar, created the original paramedic curriculum under a US Department of Transportation grant in the early 1970s."
+            },
+            {
+                number: 22,
+                text: "While responding code 3, another vehicle does not yield. What should you do?",
+                options: [
+                    "Continue at the same speed; they must yield",
+                    "Slow down and proceed with caution",
+                    "Use the air horn continuously",
+                    "Change to code 1 (non-emergency)"
+                ],
+                correct: 1,
+                explanation: "Even when responding code 3, you must slow down and proceed with caution if other vehicles do not yield. You are responsible for safe operation."
+            },
+            {
+                number: 23,
+                text: "What is the primary purpose of a vehicle inspection?",
+                options: [
+                    "Satisfy insurance requirements",
+                    "Ensure vehicle and equipment are functioning properly for safe operation",
+                    "Document mileage",
+                    "Check fuel levels"
+                ],
+                correct: 1,
+                explanation: "Completing regular vehicle inspections is very important to ensure the vehicle and all equipment are functioning properly and ready for safe emergency operations."
+            },
+            {
+                number: 24,
+                text: "When transporting a patient, crew members should:",
+                options: [
+                    "Stand while providing care for better access",
+                    "Sit on the squad bench",
+                    "Remain seated and belted whenever possible",
+                    "Kneel on the floor"
+                ],
+                correct: 2,
+                explanation: "Crew members should remain seated and belted whenever possible during transport to prevent injuries in case of sudden stops or crashes."
+            },
+            {
+                number: 25,
+                text: "What factor should influence your decision to use lights and siren?",
+                options: [
+                    "Always use them for every call",
+                    "Patient acuity and local protocols",
+                    "Time of day only",
+                    "Distance to hospital"
+                ],
+                correct: 1,
+                explanation: "The decision to respond using lights and siren should be based on patient acuity and local protocols. Risk of emergency response must be analyzed and additional risks during transport considered."
+            },
+
+            // Chapter 48: Incident Management & MCI Questions (26-50)
+            {
+                number: 26,
+                text: "What does NIMS stand for?",
+                options: [
+                    "National Incident Management System",
+                    "National Information Management Service",
+                    "Network for Incident Medical Services",
+                    "National Integration of Medical Systems"
+                ],
+                correct: 0,
+                explanation: "NIMS stands for National Incident Management System, which provides a standardized approach to incident management across all jurisdictions and disciplines."
+            },
+            {
+                number: 27,
+                text: "What does ICS stand for?",
+                options: [
+                    "Internal Communications System",
+                    "Incident Command System",
+                    "Integrated Care Services",
+                    "Interagency Coordination Structure"
+                ],
+                correct: 1,
+                explanation: "ICS stands for Incident Command System, which is the organizational structure used to manage emergency incidents."
+            },
+            {
+                number: 28,
+                text: "What are the minimum ICS training requirements for paramedics?",
+                options: [
+                    "No training required",
+                    "ICS-100 and ICS-700",
+                    "ICS-400 only",
+                    "ICS-200 only"
+                ],
+                correct: 1,
+                explanation: "Federal requirements mandate minimum entry-level certifications for paramedics include ICS-100 (Introduction to ICS) and ICS-700 (NIMS Introduction)."
+            },
+            {
+                number: 29,
+                text: "What is the primary purpose of the Incident Command System?",
+                options: [
+                    "Bill for services",
+                    "Ensure safety of responders, patients, and public through organized management",
+                    "Document the incident",
+                    "Assign blame"
+                ],
+                correct: 1,
+                explanation: "The ICS ensures the safety of responders, people injured or threatened by the incident, volunteers, media, and the general public through organized incident management."
+            },
+            {
+                number: 30,
+                text: "In ICS, who is responsible for overall incident management?",
+                options: [
+                    "Operations Chief",
+                    "Incident Commander (IC)",
+                    "Safety Officer",
+                    "Logistics Chief"
+                ],
+                correct: 1,
+                explanation: "The Incident Commander (IC) is responsible for overall management of the incident and all ICS functions."
+            },
+            {
+                number: 31,
+                text: "What are the five major components of NIMS?",
+                options: [
+                    "Planning, Operations, Logistics, Finance, Command",
+                    "Preparedness, Communications, Resource Management, Command and Management, Ongoing Management",
+                    "Assessment, Treatment, Transport, Documentation, Evaluation",
+                    "Fire, Police, EMS, Public Works, Utilities"
+                ],
+                correct: 1,
+                explanation: "The five major components of NIMS are: Preparedness, Communications and Information Management, Resource Management, Command and Management, and Ongoing Management and Maintenance."
+            },
+            {
+                number: 32,
+                text: "What defines a Mass Casualty Incident (MCI)?",
+                options: [
+                    "Any incident with more than 10 patients",
+                    "Any event that overwhelms available EMS resources",
+                    "Only incidents with fatalities",
+                    "Only natural disasters"
+                ],
+                correct: 1,
+                explanation: "An MCI is defined as any event that overwhelms EMS and community resources. This can vary by jurisdiction - what overwhelms a rural service may be routine for an urban system."
+            },
+            {
+                number: 33,
+                text: "What does START triage stand for?",
+                options: [
+                    "Standard Trauma Assessment and Resuscitation Technique",
+                    "Simple Triage And Rapid Treatment",
+                    "Strategic Transport and Resource Tracking",
+                    "Scene Triage Assessment Response Team"
+                ],
+                correct: 1,
+                explanation: "START stands for Simple Triage And Rapid Treatment. It is a rapid triage method used for adult patients at mass casualty incidents."
+            },
+            {
+                number: 34,
+                text: "What are the four triage categories in START?",
+                options: [
+                    "Critical, Serious, Minor, Dead",
+                    "Red (Immediate), Yellow (Delayed), Green (Minor), Black (Deceased)",
+                    "Priority 1, 2, 3, 4",
+                    "Emergent, Urgent, Non-urgent, Expired"
+                ],
+                correct: 1,
+                explanation: "START triage uses four color-coded categories: Red (Immediate), Yellow (Delayed), Green (Minor/Walking Wounded), and Black (Deceased/Expectant)."
+            },
+            {
+                number: 35,
+                text: "What does JumpSTART triage refer to?",
+                options: [
+                    "Triage for trauma patients only",
+                    "Pediatric triage modification of START",
+                    "Vehicle extrication priority system",
+                    "Cardiac arrest triage"
+                ],
+                correct: 1,
+                explanation: "JumpSTART is a pediatric modification of START triage, designed for triaging children from infancy through age 8 or up to 100 pounds."
+            },
+            {
+                number: 36,
+                text: "In START triage, what is assessed FIRST?",
+                options: [
+                    "Level of consciousness",
+                    "Breathing rate",
+                    "Ability to walk",
+                    "Blood pressure"
+                ],
+                correct: 2,
+                explanation: "The first step in START triage is to identify the 'walking wounded' by asking those who can walk to move to a designated area. These patients are initially tagged GREEN."
+            },
+            {
+                number: 37,
+                text: "A patient in START triage has no respirations. You open the airway and they begin breathing. What triage category?",
+                options: [
+                    "Green (Minor)",
+                    "Yellow (Delayed)",
+                    "Red (Immediate)",
+                    "Black (Deceased)"
+                ],
+                correct: 2,
+                explanation: "If a patient has no respirations but begins breathing after airway repositioning, they are tagged RED (Immediate) and require urgent intervention."
+            },
+            {
+                number: 38,
+                text: "A patient in START triage has no respirations after airway positioning. What triage category?",
+                options: [
+                    "Red (Immediate)",
+                    "Yellow (Delayed)",
+                    "Green (Minor)",
+                    "Black (Deceased)"
+                ],
+                correct: 3,
+                explanation: "If a patient has no respirations and does not begin breathing after airway repositioning, they are tagged BLACK (Deceased) in START triage."
+            },
+            {
+                number: 39,
+                text: "In START triage, a patient with a respiratory rate over 30/min is tagged:",
+                options: [
+                    "Green (Minor)",
+                    "Yellow (Delayed)",
+                    "Red (Immediate)",
+                    "Black (Deceased)"
+                ],
+                correct: 2,
+                explanation: "A respiratory rate over 30/minute indicates respiratory distress and the patient should be tagged RED (Immediate) in START triage."
+            },
+            {
+                number: 40,
+                text: "What does 'retriage' mean?",
+                options: [
+                    "Doing triage incorrectly",
+                    "Reassessing patient triage categories as conditions change",
+                    "Transferring patients between hospitals",
+                    "Documenting triage decisions"
+                ],
+                correct: 1,
+                explanation: "Retriage is the process of reassessing patients' triage categories as their conditions may improve or deteriorate during an MCI. Patients should be retriaged regularly."
+            },
+            {
+                number: 41,
+                text: "Who typically performs primary triage at an MCI?",
+                options: [
+                    "The incident commander",
+                    "The most experienced paramedic only",
+                    "First arriving personnel/triage officer",
+                    "Hospital staff"
+                ],
+                correct: 2,
+                explanation: "Primary triage is typically performed by first-arriving personnel or designated triage officers who rapidly assess and categorize all patients."
+            },
+            {
+                number: 42,
+                text: "What is secondary triage?",
+                options: [
+                    "Triage by less experienced providers",
+                    "More detailed assessment in the treatment area",
+                    "Triage at the hospital",
+                    "Triage of minor injuries only"
+                ],
+                correct: 1,
+                explanation: "Secondary triage is a more detailed assessment performed in the treatment area after initial field triage, allowing for more thorough evaluation and potential retriage."
+            },
+            {
+                number: 43,
+                text: "In ICS, where does the Medical Branch typically fall?",
+                options: [
+                    "Command Staff",
+                    "Operations Section",
+                    "Planning Section",
+                    "Finance Section"
+                ],
+                correct: 1,
+                explanation: "The Medical Branch typically falls under the Operations Section of the ICS organizational structure."
+            },
+            {
+                number: 44,
+                text: "What is the role of the Triage Officer?",
+                options: [
+                    "Provide treatment to all patients",
+                    "Rapidly assess and categorize patients, assign triage tags",
+                    "Transport patients",
+                    "Manage the entire incident"
+                ],
+                correct: 1,
+                explanation: "The Triage Officer is responsible for rapidly assessing all patients, assigning appropriate triage categories, and applying triage tags to ensure proper prioritization."
+            },
+            {
+                number: 45,
+                text: "What is the role of the Treatment Officer?",
+                options: [
+                    "Perform triage",
+                    "Oversee treatment areas and patient care delivery",
+                    "Transport patients",
+                    "Document the incident"
+                ],
+                correct: 1,
+                explanation: "The Treatment Officer oversees the treatment areas (Red, Yellow, Green) and ensures appropriate care is provided to patients in each treatment area."
+            },
+            {
+                number: 46,
+                text: "What is the role of the Transportation Officer?",
+                options: [
+                    "Drive all ambulances",
+                    "Coordinate patient transport to appropriate facilities",
+                    "Perform triage",
+                    "Treat patients"
+                ],
+                correct: 1,
+                explanation: "The Transportation Officer coordinates patient transport, tracking which patients go to which hospitals and managing ambulance resources to prevent overwhelming any single facility."
+            },
+            {
+                number: 47,
+                text: "What does CISM stand for?",
+                options: [
+                    "Critical Incident Stress Management",
+                    "Casualty Information System Management",
+                    "Command Incident Safety Manual",
+                    "Cardiac Intervention Standard Methods"
+                ],
+                correct: 0,
+                explanation: "CISM stands for Critical Incident Stress Management, which provides mental health support for responders after traumatic incidents like MCIs."
+            },
+            {
+                number: 48,
+                text: "When establishing ICS at an MCI, what should the first arriving paramedic do?",
+                options: [
+                    "Begin treating patients immediately",
+                    "Wait for a supervisor",
+                    "Establish incident command and complete scene size-up",
+                    "Request air medical"
+                ],
+                correct: 2,
+                explanation: "The first-arriving paramedic should establish incident command, complete a thorough scene size-up, estimate patient numbers, and request appropriate resources."
+            },
+            {
+                number: 49,
+                text: "What information should be included in an initial MCI scene size-up report?",
+                options: [
+                    "Patient names only",
+                    "Number of patients, type of incident, resources needed, hazards present",
+                    "Weather conditions only",
+                    "Your unit number"
+                ],
+                correct: 1,
+                explanation: "Initial scene size-up should include: type of incident, approximate number of patients, obvious hazards, resources needed, and establishment of command."
+            },
+            {
+                number: 50,
+                text: "In MCI operations, what is the purpose of staging?",
+                options: [
+                    "To delay response",
+                    "To organize incoming resources and prevent scene congestion",
+                    "To rest crews",
+                    "To perform vehicle maintenance"
+                ],
+                correct: 1,
+                explanation: "Staging organizes incoming resources at a designated location away from the scene to prevent congestion and ensure organized deployment as needed by command."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let studentName = "";
+        let answeredQuestions = [];
+
+        function startScenario() {
+            studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('Please enter your name before starting.');
+                return;
+            }
+            
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showCertificate();
+                return;
+            }
+
+            const container = document.getElementById('questionsContainer');
+            const q = questions[currentQuestion];
+            
+            const questionHTML = `
+                <div class="question-container active" id="question${currentQuestion}">
+                    <div class="question">
+                        <div class="question-number">Question ${q.number} of 50</div>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options" id="options${currentQuestion}">
+                            ${q.options.map((option, index) => `
+                                <div class="option" onclick="selectAnswer(${currentQuestion}, ${index})">
+                                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                    <div>${option}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback${currentQuestion}"></div>
+                        <div class="btn-container" style="display: none;" id="nextBtn${currentQuestion}">
+                            <button class="btn" onclick="nextQuestion()">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += questionHTML;
+            updateProgress();
+        }
+
+        function selectAnswer(questionIndex, selectedIndex) {
+            const q = questions[questionIndex];
+            const options = document.querySelectorAll(`#options${questionIndex} .option`);
+            const feedback = document.getElementById(`feedback${questionIndex}`);
+            const nextBtn = document.getElementById(`nextBtn${questionIndex}`);
+            
+            // Disable all options
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            // Check if correct
+            const isCorrect = selectedIndex === q.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+                options[selectedIndex].classList.add('correct');
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✓ Correct!</div>
+                    <p>${q.explanation}</p>
+                `;
+            } else {
+                options[selectedIndex].classList.add('incorrect');
+                options[q.correct].classList.add('correct');
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✗ Incorrect</div>
+                    <p><strong>The correct answer is: ${String.fromCharCode(65 + q.correct)}) ${q.options[q.correct]}</strong></p>
+                    <p>${q.explanation}</p>
+                `;
+            }
+            
+            answeredQuestions.push({
+                question: q.number,
+                correct: isCorrect
+            });
+            
+            nextBtn.style.display = 'block';
+            updateScoreboard();
+        }
+
+        function nextQuestion() {
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progress').textContent = `${currentQuestion + 1}/50`;
+        }
+
+        function updateScoreboard() {
+            document.getElementById('correct').textContent = correctAnswers;
+            const percentage = Math.round((correctAnswers / (currentQuestion + 1)) * 100);
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function showCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date();
+            const dateString = today.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('certificate').classList.add('show');
+            document.getElementById('certName').textContent = studentName;
+            document.getElementById('certScore').textContent = percentage + '%';
+            document.getElementById('certDate').textContent = dateString;
+            
+            // Update final scoreboard
+            document.getElementById('progress').textContent = '50/50';
+            document.getElementById('correct').textContent = correctAnswers;
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function downloadCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date().toLocaleDateString('en-US');
+            
+            // Create a more detailed certificate view for download
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>EMS 210 Week 1 Certificate</title>
+                    <style>
+                        body {
+                            font-family: Georgia, serif;
+                            padding: 40px;
+                            text-align: center;
+                        }
+                        .cert-border {
+                            border: 10px double #2a5298;
+                            padding: 60px;
+                            margin: 20px;
+                        }
+                        h1 { 
+                            color: #2a5298; 
+                            font-size: 42px; 
+                            margin-bottom: 30px;
+                        }
+                        .student-name {
+                            font-size: 32px;
+                            font-weight: bold;
+                            color: #2a5298;
+                            margin: 30px 0;
+                            border-bottom: 3px solid #2a5298;
+                            display: inline-block;
+                            padding: 10px 40px;
+                        }
+                        .score {
+                            font-size: 72px;
+                            font-weight: bold;
+                            color: #28a745;
+                            margin: 40px 0;
+                        }
+                        .details {
+                            font-size: 18px;
+                            line-height: 2;
+                            margin: 20px 0;
+                        }
+                        .footer {
+                            margin-top: 60px;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="cert-border">
+                        <h1>Certificate of Completion</h1>
+                        <p class="details">This certifies that</p>
+                        <div class="student-name">${studentName}</div>
+                        <p class="details">has successfully completed</p>
+                        <p class="details"><strong>EMS 210 - Week 1 Interactive Scenario</strong></p>
+                        <p class="details">Transport Operations & Incident Management</p>
+                        <p class="details">Chapters 47 & 48</p>
+                        <div class="score">${percentage}%</div>
+                        <p class="details">Score: ${correctAnswers} out of 50 questions correct</p>
+                        <p class="details">${today}</p>
+                        <div class="footer">
+                            <p>This certificate should be uploaded to Canvas for credit.</p>
+                            <p>EMS 210 - EMS Operations | February 2026</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
+    </script>
+</body>
+</html>
