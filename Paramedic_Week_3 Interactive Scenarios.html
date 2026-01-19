@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS 210 - Week 4 Interactive Scenario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b00 0%, #c21500 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .score-bar {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b00;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .intro-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-screen h2 {
+            color: #ff6b00;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .intro-screen p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .scenario-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #ff6b00;
+        }
+        
+        .question-number {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover {
+            border-color: #ff6b00;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .option-letter {
+            background: #ff6b00;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            pointer-events: none;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            pointer-events: none;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background: #c21500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .certificate {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .certificate.show {
+            display: block;
+        }
+        
+        .certificate-border {
+            border: 8px double #ff6b00;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .certificate h2 {
+            color: #ff6b00;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: Georgia, serif;
+        }
+        
+        .certificate-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #495057;
+            margin: 20px 0;
+        }
+        
+        .certificate-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b00;
+            margin: 30px 0;
+            padding: 10px;
+            border-bottom: 2px solid #ff6b00;
+            display: inline-block;
+        }
+        
+        .certificate-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 30px 0;
+        }
+        
+        .certificate-date {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            margin-top: 30px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b00 0%, #ffd200 100%);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: #ff6b00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EMS 210 - Week 4 Interactive Scenario</h1>
+            <p>Hazardous Materials Awareness</p>
+            <p>Chapter 56</p>
+        </div>
+        
+        <div class="score-bar">
+            <div class="score-item">
+                <div class="score-label">Progress</div>
+                <div class="score-value" id="progress">0/50</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0%</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Intro Screen -->
+            <div id="intro" class="intro-screen">
+                <h2>Welcome, Paramedic</h2>
+                <p>You are about to engage in a comprehensive review of hazardous materials awareness. This interactive scenario contains 50 questions based on real-world hazmat situations.</p>
+                
+                <div class="scenario-box">
+                    <h3>⚠️ HAZMAT WARNING</h3>
+                    <p>Hazardous materials incidents require specialized knowledge and extreme caution. Your awareness-level training helps you recognize hazards and request appropriate resources.</p>
+                </div>
+                
+                <div class="scenario-box">
+                    <h3>Instructions</h3>
+                    <p><strong>• Answer all 50 multiple-choice questions</strong></p>
+                    <p><strong>• Immediate feedback will be provided for each answer</strong></p>
+                    <p><strong>• Your final score will be calculated at the end</strong></p>
+                    <p><strong>• A completion certificate will be generated for Canvas submission</strong></p>
+                </div>
+                
+                <label for="studentName" style="display: block; margin-top: 30px; font-weight: 600; color: #ff6b00;">Enter Your Name:</label>
+                <input type="text" id="studentName" class="name-input" placeholder="First and Last Name" required>
+                
+                <div class="btn-container">
+                    <button class="btn" onclick="startScenario()">Begin Scenario</button>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div id="progressBar" class="progress-bar" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            
+            <!-- Questions Container -->
+            <div id="questionsContainer"></div>
+            
+            <!-- Certificate -->
+            <div id="certificate" class="certificate">
+                <div class="certificate-border">
+                    <h2>Certificate of Completion</h2>
+                    <p class="certificate-text">This certifies that</p>
+                    <div class="certificate-name" id="certName"></div>
+                    <p class="certificate-text">has successfully completed</p>
+                    <p class="certificate-text"><strong>EMS 210 - Week 4 Interactive Scenario</strong></p>
+                    <p class="certificate-text">Hazardous Materials Awareness</p>
+                    <div class="certificate-score" id="certScore"></div>
+                    <p class="certificate-date" id="certDate"></p>
+                    <button class="btn download-btn" onclick="downloadCertificate()">Download Certificate</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: #6c757d;">Upload this certificate to Canvas to receive credit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Chapter 56: Hazardous Materials Awareness (1-50)
+            {
+                number: 1,
+                text: "What is the definition of a hazardous material (hazmat)?",
+                options: [
+                    "Only radioactive materials",
+                    "Any items or agents that have potential to cause harm to humans, animals, or the environment",
+                    "Only chemicals used in manufacturing",
+                    "Materials that are always flammable"
+                ],
+                correct: 1,
+                explanation: "A hazardous material is any items or agents (whether biologic, chemical, radiologic, and/or physical) that have the potential to cause harm to humans, animals, or the environment, either through direct contact or through interaction with other factors."
+            },
+            {
+                number: 2,
+                text: "How much hazardous material is managed annually in the United States?",
+                options: [
+                    "5 billion tons",
+                    "15 billion tons",
+                    "More than 35 billion tons",
+                    "50 billion tons"
+                ],
+                correct: 2,
+                explanation: "More than 35 billion tons of hazardous materials are managed annually in the United States, with more than 800,000 shipments moved daily by plane, train, truck, or vessel."
+            },
+            {
+                number: 3,
+                text: "What legislation established requirements for emergency planning and hazmat incident reporting in 1986?",
+                options: [
+                    "OSHA Act",
+                    "EPA Act",
+                    "Superfund Amendments and Reauthorization Act (SARA)",
+                    "Hazmat Control Act"
+                ],
+                correct: 2,
+                explanation: "The Superfund Amendments and Reauthorization Act (the Superfund Act) of 1986 established requirements for federal, state, and local governments and industry regarding emergency planning and the reporting of hazmat-related incidents."
+            },
+            {
+                number: 4,
+                text: "What is the minimum level of hazmat training required for all EMS workers and first responders?",
+                options: [
+                    "Operations level",
+                    "Technician level",
+                    "First responder awareness level",
+                    "Specialist level"
+                ],
+                correct: 2,
+                explanation: "The minimum level of training for EMS workers and all first responders is the first responder awareness level, as established by OSHA and the EPA."
+            },
+            {
+                number: 5,
+                text: "At the awareness level, what must responders be able to do?",
+                options: [
+                    "Enter the hot zone and perform decontamination",
+                    "Evaluate incident, identify hazmat/WMD, call for resources, identify hazmat, use ERG, maintain safe perimeter",
+                    "Operate specialized hazmat equipment",
+                    "Provide medical care in contaminated areas"
+                ],
+                correct: 1,
+                explanation: "At the awareness level, responders must be able to: evaluate the incident, identify hazmat/WMD exists, call for resources, identify name/UN-NA number/placard/markings, gather ERG information, and maintain a safe perimeter."
+            },
+            {
+                number: 6,
+                text: "According to NFPA 470, what should paramedics responding to hazmat scenes be able to do?",
+                options: [
+                    "Only call for additional resources",
+                    "Analyze scene for health risks, deliver ALS, implement treatment plan, begin care after decontamination",
+                    "Enter the hot zone immediately",
+                    "Perform decontamination procedures"
+                ],
+                correct: 1,
+                explanation: "According to NFPA 470, paramedics should be able to: analyze the scene to determine health risks, deliver ALS to patients, implement a prehospital treatment plan for exposed patients, and begin care after appropriate decontamination."
+            },
+            {
+                number: 7,
+                text: "What are the TWO methods used to identify hazardous materials?",
+                options: [
+                    "Visual and chemical analysis",
+                    "Informal product identification and formal product identification",
+                    "Laboratory testing and field testing",
+                    "Computer analysis and manual inspection"
+                ],
+                correct: 1,
+                explanation: "The two methods used to identify hazardous materials are informal product identification (visual inspection, reports, occupancy, location, etc.) and formal product identification (labels, placards, shipping papers, SDS)."
+            },
+            {
+                number: 8,
+                text: "Which of the following is an example of INFORMAL product identification?",
+                options: [
+                    "Reading a placard",
+                    "Checking shipping papers",
+                    "Visual inspection with binoculars, occupancy type, verbal reports from bystanders",
+                    "Reviewing Safety Data Sheets"
+                ],
+                correct: 2,
+                explanation: "Informal product identification includes: visual inspection with binoculars, verbal reports by bystanders, occupancy type, incident location, location within building, visual indicators, vehicle types, container characteristics, senses, and signs/symptoms of exposed people."
+            },
+            {
+                number: 9,
+                text: "How many labeling systems have traditionally been used to identify hazmat?",
+                options: [
+                    "Three",
+                    "Four",
+                    "Six",
+                    "Eight"
+                ],
+                correct: 2,
+                explanation: "Traditionally, hazmat have been labeled by one or more of six systems: ANSI, DOT, GHS, IATA, NFPA, and OSHA (SDS)."
+            },
+            {
+                number: 10,
+                text: "What does the NFPA 704 diamond-shaped identification system rate?",
+                options: [
+                    "Only flammability",
+                    "Health, fire, and reactivity hazards on a scale of 1-4",
+                    "Chemical composition",
+                    "Transportation requirements"
+                ],
+                correct: 1,
+                explanation: "The NFPA 704 System uses color and a numeric rating scale to identify the degree of hazard for health, fire, and reactivity, with numbers from 1 (least harmful) to 4 (most harmful)."
+            },
+            {
+                number: 11,
+                text: "In the NFPA 704 system, what does the number '4' indicate?",
+                options: [
+                    "Least harmful",
+                    "Moderately harmful",
+                    "Very harmful",
+                    "Most harmful"
+                ],
+                correct: 3,
+                explanation: "In the NFPA 704 numbering system, the scale rates each category from 1 (least harmful) to 4 (most harmful)."
+            },
+            {
+                number: 12,
+                text: "What does OSHA require for each chemical produced, stored, or used in the United States?",
+                options: [
+                    "A permit",
+                    "A Safety Data Sheet (SDS)",
+                    "Insurance",
+                    "Federal registration"
+                ],
+                correct: 1,
+                explanation: "OSHA's Hazard Communication Standard requires Safety Data Sheets (SDS) for each chemical produced, stored, or used in the United States. SDSs are supplied by the manufacturer."
+            },
+            {
+                number: 13,
+                text: "What information do Safety Data Sheets (SDS) contain?",
+                options: [
+                    "Only chemical composition",
+                    "Safe handling/storage, emergency actions after exposure, classification of health hazards",
+                    "Only pricing information",
+                    "Manufacturing processes only"
+                ],
+                correct: 1,
+                explanation: "SDSs contain information for safe and proper handling and storage of the material, information on emergency actions needed following exposure, and classify the potential of significant health hazards from exposure to a material."
+            },
+            {
+                number: 14,
+                text: "What does ERG stand for and who publishes it?",
+                options: [
+                    "Emergency Resource Guide, published by OSHA",
+                    "Emergency Response Guidebook, published by DOT, Transport Canada, and Secretariat of Mexico",
+                    "Emergency Rescue Guidelines, published by NFPA",
+                    "Emergency Reference Guide, published by EPA"
+                ],
+                correct: 1,
+                explanation: "ERG stands for Emergency Response Guidebook, published by the DOT, Transport Canada, and the Secretariat of Communications and Transportation of Mexico. It lists more than 1,000 hazmat."
+            },
+            {
+                number: 15,
+                text: "What information does the ERG provide?",
+                options: [
+                    "Only chemical names",
+                    "Basic first aid, names, ID numbers, evacuation distances - cross-referenced alphabetically and numerically",
+                    "Only transportation requirements",
+                    "Manufacturing processes"
+                ],
+                correct: 1,
+                explanation: "The ERG lists basic first aid procedures for managing an exposure, includes names and identification numbers of substances (cross-referenced alphabetically and numerically), and includes the distance and area that should be evacuated."
+            },
+            {
+                number: 16,
+                text: "What is the universal Poison Control number in the United States?",
+                options: [
+                    "1-800-222-1222",
+                    "911",
+                    "1-800-424-9300",
+                    "1-888-255-3924"
+                ],
+                correct: 0,
+                explanation: "The universal Poison Control number is 1-800-222-1222. Regional poison control centers are valuable assets in any EMS system."
+            },
+            {
+                number: 17,
+                text: "What is CHEMTREC and what is their phone number?",
+                options: [
+                    "A chemical manufacturer; 1-800-
