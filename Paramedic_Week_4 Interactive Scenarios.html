@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS 210 - Week 4 Interactive Scenario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #434343 0%, #000000 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .score-bar {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ee0979;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .intro-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-screen h2 {
+            color: #ee0979;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .intro-screen p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .scenario-box h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #ee0979;
+        }
+        
+        .question-number {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover {
+            border-color: #ee0979;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .option-letter {
+            background: #ee0979;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            pointer-events: none;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            pointer-events: none;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #ee0979;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .certificate {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .certificate.show {
+            display: block;
+        }
+        
+        .certificate-border {
+            border: 8px double #ee0979;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .certificate h2 {
+            color: #ee0979;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: Georgia, serif;
+        }
+        
+        .certificate-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #495057;
+            margin: 20px 0;
+        }
+        
+        .certificate-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ee0979;
+            margin: 30px 0;
+            padding: 10px;
+            border-bottom: 2px solid #ee0979;
+            display: inline-block;
+        }
+        
+        .certificate-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 30px 0;
+        }
+        
+        .certificate-date {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            margin-top: 30px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: #ee0979;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EMS 210 - Week 4 Interactive Scenario</h1>
+            <p>Bioterrorism and Weapons of Mass Destruction</p>
+            <p>Chapter 57</p>
+        </div>
+        
+        <div class="score-bar">
+            <div class="score-item">
+                <div class="score-label">Progress</div>
+                <div class="score-value" id="progress">0/50</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0%</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Intro Screen -->
+            <div id="intro" class="intro-screen">
+                <h2>Welcome, Paramedic</h2>
+                <p>You are about to engage in a comprehensive review of bioterrorism and weapons of mass destruction. This interactive scenario contains 50 questions based on real-world WMD response situations.</p>
+                
+                <div class="scenario-box">
+                    <h3>⚠️ CRITICAL THREAT WARNING</h3>
+                    <p>WMD incidents are among the most dangerous situations you will face. Recognition, scene safety, and proper response protocols are essential to your survival and the safety of the public.</p>
+                </div>
+                
+                <div class="scenario-box">
+                    <h3>Instructions</h3>
+                    <p><strong>• Answer all 50 multiple-choice questions</strong></p>
+                    <p><strong>• Immediate feedback will be provided for each answer</strong></p>
+                    <p><strong>• Your final score will be calculated at the end</strong></p>
+                    <p><strong>• A completion certificate will be generated for Canvas submission</strong></p>
+                </div>
+                
+                <label for="studentName" style="display: block; margin-top: 30px; font-weight: 600; color: #ee0979;">Enter Your Name:</label>
+                <input type="text" id="studentName" class="name-input" placeholder="First and Last Name" required>
+                
+                <div class="btn-container">
+                    <button class="btn" onclick="startScenario()">Begin Scenario</button>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div id="progressBar" class="progress-bar" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            
+            <!-- Questions Container -->
+            <div id="questionsContainer"></div>
+            
+            <!-- Certificate -->
+            <div id="certificate" class="certificate">
+                <div class="certificate-border">
+                    <h2>Certificate of Completion</h2>
+                    <p class="certificate-text">This certifies that</p>
+                    <div class="certificate-name" id="certName"></div>
+                    <p class="certificate-text">has successfully completed</p>
+                    <p class="certificate-text"><strong>EMS 210 - Week 4 Interactive Scenario</strong></p>
+                    <p class="certificate-text">Bioterrorism and Weapons of Mass Destruction</p>
+                    <div class="certificate-score" id="certScore"></div>
+                    <p class="certificate-date" id="certDate"></p>
+                    <button class="btn download-btn" onclick="downloadCertificate()">Download Certificate</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: #6c757d;">Upload this certificate to Canvas to receive credit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Chapter 57: Bioterrorism and Weapons of Mass Destruction (1-50)
+            {
+                number: 1,
+                text: "In 1155 BCE, how did Holy Roman Emperor Barbarossa allegedly use biologic weapons?",
+                options: [
+                    "Spreading infected blankets",
+                    "Poisoning enemies' water wells with human bodies",
+                    "Using diseased animals",
+                    "Contaminating food supplies"
+                ],
+                correct: 1,
+                explanation: "In 1155 BCE, Italy's Holy Roman Emperor Barbarossa is believed to have poisoned enemies' water wells with human bodies, representing an early use of biological warfare."
+            },
+            {
+                number: 2,
+                text: "In what year did many countries agree to stop biologic weapons research and development?",
+                options: [
+                    "1945",
+                    "1962",
+                    "1972",
+                    "2001"
+                ],
+                correct: 2,
+                explanation: "Many countries agreed to stop biologic weapons research and development in 1972, though some countries continue to have biologic warfare programs."
+            },
+            {
+                number: 3,
+                text: "What is a 'nonstate actor' in the context of bioterrorism?",
+                options: [
+                    "A government agency",
+                    "A political, social, or religious nongovernmental group trying to promote a cause",
+                    "An independent contractor",
+                    "A foreign military"
+                ],
+                correct: 1,
+                explanation: "A nonstate actor is a political, social, or religious nongovernmental group that is trying to promote a cause. These groups have also used WMD agents in acts of terrorism."
+            },
+            {
+                number: 4,
+                text: "What bioterrorism incident occurred in the United States in 2001 resulting in five deaths?",
+                options: [
+                    "Sarin gas in subway",
+                    "Ricin letters",
+                    "Mail deliberately contaminated with anthrax",
+                    "Botulism in food"
+                ],
+                correct: 2,
+                explanation: "In the United States in 2001, people were exposed to mail deliberately contaminated with anthrax, resulting in five deaths."
+            },
+            {
+                number: 5,
+                text: "How many categories does the CDC use to classify biologic agents?",
+                options: [
+                    "Two (A and B)",
+                    "Three (A, B, and C)",
+                    "Four (A, B, C, and D)",
+                    "Five (A through E)"
+                ],
+                correct: 1,
+                explanation: "The CDC has published a list of biologic agents divided into categories A, B, and C based on priority level and characteristics."
+            },
+            {
+                number: 6,
+                text: "What defines Category A biologic agents?",
+                options: [
+                    "Lowest priority, minimal threat",
+                    "Highest priority; pose risk to national security; easily disseminated; high death rate; cause public panic",
+                    "Moderate priority with low mortality",
+                    "Agents that only affect animals"
+                ],
+                correct: 1,
+                explanation: "Category A agents are the highest priority and pose a risk to national security. They can be easily disseminated or transmitted person-to-person, cause high death rates, and have potential to cause major public health problems and public panic."
+            },
+            {
+                number: 7,
+                text: "Which of the following is an example of a Category A agent?",
+                options: [
+                    "Q fever",
+                    "Nipah virus",
+                    "Bacillus anthracis (anthrax)",
+                    "Common cold virus"
+                ],
+                correct: 2,
+                explanation: "An example of a category A agent is Bacillus anthracis (anthrax), which is easily disseminated and causes high mortality."
+            },
+            {
+                number: 8,
+                text: "What characterizes Category B biologic agents?",
+                options: [
+                    "Highest priority with highest death rate",
+                    "Second-highest priority; fairly easy to disseminate; moderate illness; lower death rate than Category A",
+                    "Lowest priority",
+                    "Not a threat to humans"
+                ],
+                correct: 1,
+                explanation: "Category B agents are the second-highest priority. They are fairly easy to disseminate, cause moderate illnesses, and have a lower death rate than category A agents."
+            },
+            {
+                number: 9,
+                text: "Which of the following is an example of a Category B agent?",
+                options: [
+                    "Anthrax",
+                    "Smallpox",
+                    "Coxiella burnetii (Q fever)",
+                    "Plague"
+                ],
+                correct: 2,
+                explanation: "An example of a category B agent is Coxiella burnetii, which causes Q fever."
+            },
+            {
+                number: 10,
+                text: "What defines Category C biologic agents?",
+                options: [
+                    "Most dangerous agents",
+                    "Third-highest priority; new pathogens for future mass dissemination; widely available; easy to produce; potential for high death/sickness",
+                    "Agents with no threat potential",
+                    "Only animal diseases"
+                ],
+                correct: 1,
+                explanation: "Category C agents are third-highest priority and include new pathogens that could be engineered for mass dissemination in the future. They are widely available, easy to produce and dispense, and have potential to cause high rates of death and sickness."
+            },
+            {
+                number: 11,
+                text: "Which is an example of a Category C agent?",
+                options: [
+                    "Anthrax",
+                    "Q fever",
+                    "Nipah virus",
+                    "Botulism"
+                ],
+                correct: 2,
+                explanation: "An example of a category C agent is Nipah virus, which represents emerging pathogens that could be engineered for mass dissemination."
+            },
+            {
+                number: 12,
+                text: "What does CBRNE stand for?",
+                options: [
+                    "Chemical, Biological, Radiation, Nuclear, Explosive",
+                    "Chemical, Biologic, Radiologic, Nuclear, Explosive agents",
+                    "Central Bureau for Rescue and Nuclear Events",
+                    "Crisis, Biological, Response, Nuclear, Emergency"
+                ],
+                correct: 1,
+                explanation: "CBRNE is an abbreviation for the categories of WMDs: Chemical, Biologic, Radiologic, Nuclear, and Explosive agents."
+            },
+            {
+                number: 13,
+                text: "What are the THREE main ways most biologic agents used in bioterrorism are designed to enter the body?",
+                options: [
+                    "Eyes, ears, nose",
+                    "Inhalation, ingestion, skin absorption (injection is rare)",
+                    "Only through injection",
+                    "Only through breathing"
+                ],
+                correct: 1,
+                explanation: "Most biologic agents are designed to enter the body through: (1) Inhalation of small particles into the lungs, (2) Ingestion of contaminated food or water, (3) Contamination of the skin allowing absorption of toxins. Exposure by injection is rare."
+            },
+            {
+                number: 14,
+                text: "How can aerosols be delivered in bioterrorism attacks?",
+                options: [
+                    "Only in liquid form",
+                    "Wet or dry form in closed or open spaces",
+                    "Only outdoors",
+                    "Only in powder form"
+                ],
+                correct: 1,
+                explanation: "Aerosols can be delivered in wet or dry form in closed or open spaces using various equipment including crop-dusting planes, aerosol-generating devices, ventilation systems, and fine powders."
+            },
+            {
+                number: 15,
+                text: "What is anthrax?",
+                options: [
+                    "A virus affecting the respiratory system",
+                    "An acute infectious disease caused by spore-forming bacterium Bacillus anthracis",
+                    "A nerve agent",
+                    "A radiation source"
+                ],
+                correct: 1,
+                explanation: "Anthrax is an acute infectious disease caused by the spore-forming bacterium Bacillus anthracis. It most often occurs in livestock and wild animals but can also infect humans."
+            },
+            {
+                number: 16,
+                text: "What is the most common form of anthrax?",
+                options: [
+                    "Inhalation anthrax",
+                    "Gastrointestinal anthrax",
+                    "Cutaneous anthrax",
+                    "Neurological anthrax"
+                ],
+                correct: 2,
+                explanation: "The most common form of anthrax is cutaneous anthrax, which affects the skin."
+            },
+            {
+                number: 17,
+                text: "Does anthrax typically spread from person to person?",
+                options: [
+                    "Yes, very contagious",
+                    "Direct person-to-person spread usually does not occur; only rare cases from cutaneous lesion discharge",
+                    "Only through airborne transmission",
+                    "Only through blood contact"
+                ],
+                correct: 1,
+                explanation: "Direct person-to-person spread of anthrax usually does not occur. Only rare cases of person-to-person transmission have been reported when there has been exposure to discharge from open lesions of cutaneous anthrax."
+            },
+            {
+                number: 18,
+                text: "What bacterium causes botulism?",
+                options: [
+                    "Bacillus anthracis",
+                    "Yersinia pestis",
+                    "Clostridium botulinum",
+                    "Francisella tularensis"
+                ],
+                correct: 2,
+                explanation: "Botulism is caused by the bacterium Clostridium botulinum, which produces a nerve toxin that causes paralysis."
+            },
+            {
+                number: 19,
+                text: "What are the THREE types of botulism?",
+                options: [
+                    "Acute, chronic, latent",
+                    "Foodborne, wound, infant",
+                    "Respiratory, gastrointestinal, cutaneous",
+                    "Primary, secondary, tertiary"
+                ],
+                correct: 1,
+                explanation: "The three types of botulism are: (1) Foodborne botulism (from eating foods containing toxin), (2) Wound botulism (from toxin produced in infected wound), (3) Infant botulism (from consuming spores that grow in intestines)."
+            },
+            {
+                number: 20,
+                text: "Is botulism spread from person to person?",
+                options: [
+                    "Yes, highly contagious",
+                    "Botulism is not spread from person to person",
+                    "Only through respiratory droplets",
+                    "Only through blood contact"
+                ],
+                correct: 1,
+                explanation: "Botulism is not spread from person to person. If diagnosed early, foodborne and wound botulism can be treated with an antitoxin."
+            },
+            {
+                number: 21,
+                text: "What bacterium causes plague?",
+                options: [
+                    "Bacillus anthracis",
+                    "Clostridium botulinum",
+                    "Yersinia pestis",
+                    "Francisella tularensis"
+                ],
+                correct: 2,
+                explanation: "Plague is caused by the bacterium Yersinia pestis, which is found in rodents and their fleas in many areas of the world."
+            },
+            {
+                number: 22,
+                text: "What are the THREE types of plague?",
+                options: [
+                    "Mild, moderate, severe",
+                    "Bubonic, septicemic, pneumonic",
+                    "Acute, chronic, latent",
+                    "Primary, secondary, tertiary"
+                ],
+                correct: 1,
+                explanation: "The three types of plague are: (1) Bubonic plague (arises in lymph nodes, produces buboes), (2) Septicemic plague (lymph infection spreads to bloodstream), (3) Pneumonic plague (arises in lungs, most virulent, spreads person-to-person via droplets)."
+            },
+            {
+                number: 23,
+                text: "Which form of plague is the most virulent and can spread person-to-person?",
+                options: [
+                    "Bubonic plague",
+                    "Septicemic plague",
+                    "Pneumonic plague",
+                    "All forms spread equally"
+                ],
+                correct: 2,
+                explanation: "Pneumonic plague arises in the lungs and is the most virulent form of the disease, allowing the infection to spread from person to person via droplet nuclei."
+            },
+            {
+                number: 24,
+                text: "How quickly should plague be treated with antibiotics after diagnosis?",
+                options: [
+                    "Within 1 week",
+                    "Within 72 hours",
+                    "Within 24 hours",
+                    "Treatment can wait"
+                ],
+                correct: 2,
+                explanation: "Plague should be treated early (within 24 hours) with antibiotics. Patients should be isolated and close contacts identified. Standard precautions and respiratory protection for caregivers are crucial."
+            },
+            {
+                number: 25,
+                text: "What is ricin?",
+                options: [
+                    "A nerve agent",
+                    "A potent protein cytotoxin derived from castor plant beans",
+                    "A virus",
+                    "A radioactive material"
+                ],
+                correct: 1,
+                explanation: "Ricin is a potent protein cytotoxin, a chemical that is derived from the beans of the castor plant (Ricinus communis)."
+            },
+            {
+                number: 26,
+                text: "Is there an antidote for ricin poisoning?",
+                options: [
+                    "Yes, widely available",
+                    "No antidote exists; treatment is supportive and aims to eliminate toxin",
+                    "Only experimental antidotes",
+                    "Antivenom is effective"
+                ],
+                correct: 1,
+                explanation: "No antidote exists for ricin poisoning. Treatment is aimed at avoiding exposure and eliminating the toxin from the body as quickly as possible, with supportive care."
+            },
+            {
+                number: 27,
+                text: "When was smallpox declared extinct by the WHO?",
+                options: [
+                    "1960",
+                    "1972",
+                    "1980",
+                    "1990"
+                ],
+                correct: 2,
+                explanation: "Smallpox was declared extinct by the World Health Organization in 1980 because of near-universal vaccination."
+            },
+            {
+                number: 28,
+                text: "What are the initial signs and symptoms of smallpox?",
+                options: [
+                    "Rash appears first",
+                    "High fever, fatigue, headache, backache; followed in 2-3 days by rash and skin lesions",
+                    "Only respiratory symptoms",
+                    "Gastrointestinal distress"
+                ],
+                correct: 1,
+                explanation: "Signs and symptoms of smallpox include high fever, fatigue, headache, and backache. These are followed within 2 to 3 days with the smallpox rash and skin lesions."
+            },
+            {
+                number: 29,
+                text: "What bacterium causes tularemia?",
+                options: [
+                    "Bacillus anthracis",
+                    "Yersinia pestis",
+                    "Francisella tularensis",
+                    "Clostridium botulinum"
+                ],
+                correct: 2,
+                explanation: "Tularemia is a serious illness caused by the bacterium Francisella tularensis, which is found in animals (especially rodents, rabbits, and hares)."
+            },
+            {
+                number: 30,
+                text: "Does tularemia transmit from person to person?",
+                options: [
+                    "Yes, highly contagious",
+                    "Transmission from person to person does not occur",
+                    "Only through blood contact",
+                    "Only through respiratory droplets"
+                ],
+                correct: 1,
+                explanation: "Transmission of tularemia from person to person does not occur. The disease is highly infectious and some strains are resistant to antibiotics."
+            },
+            {
+                number: 31,
+                text: "What does VHF stand for?",
+                options: [
+                    "Very High Fever",
+                    "Viral Hemorrhagic Fevers",
+                    "Vascular Health Failure",
+                    "Virulent Hepatic Fibrosis"
+                ],
+                correct: 1,
+                explanation: "VHF stands for Viral Hemorrhagic Fevers, which refer to a group of illnesses caused by several distinct families of viruses."
+            },
+            {
+                number: 32,
+                text: "What virus families can cause viral hemorrhagic fevers?",
+                options: [
+                    "Only coronaviruses",
+                    "Arenaviruses, filoviruses, bunyaviruses, paramyxoviruses, flaviviruses",
+                    "Only influenza viruses",
+                    "Herpesviruses only"
+                ],
+                correct: 1,
+                explanation: "VHFs are caused by several distinct families of viruses including arenaviruses, filoviruses, bunyaviruses, paramyxoviruses, and flaviviruses."
+            },
+            {
+                number: 33,
+                text: "How are VHFs usually transmitted to humans?",
+                options: [
+                    "Only person-to-person",
+                    "Contact with urine, fecal matter, saliva, or body excretions from infected animals",
+                    "Only through airborne transmission",
+                    "Through contaminated water only"
+                ],
+                correct: 1,
+                explanation: "VHFs usually are transmitted to humans during contact with urine, fecal matter, saliva, or other body excretions from an infected animal. They can also spread person-to-person through body tissues and fluids."
+            },
+            {
+                number: 34,
+                text: "What is a radiologic dispersion device (RDD) also called?",
+                options: [
+                    "Clean bomb",
+                    "Dirty nuke or dirty bomb",
+                    "Nuclear reactor",
+                    "Radiation chamber"
+                ],
+                correct: 1,
+                explanation: "A radiologic dispersion device (RDD) is also called a 'dirty nuke' or 'dirty bomb.' Its use as a terrorist weapon is considered far more likely than use of a true nuclear device."
+            },
+            {
+                number: 35,
+                text: "What are the THREE principles of radiation protection?",
+                options: [
+                    "Stop, drop, and roll",
+                    "Time, distance, and shielding",
+                    "Assess, treat, transport",
+                    "Contain, control, clean"
+                ],
+                correct: 1,
+                explanation: "The principles of time, distance, and shielding should be used for personal protection: (1) Limit time at scene, (2) Increase distance from source, (3) Shield yourself with heavy, dense materials."
+            },
+            {
+                number: 36,
+                text: "What are incendiary devices often referred to as?",
+                options: [
+                    "Chemical bombs",
+                    "Firebombs",
+                    "Radiation devices",
+                    "Biological weapons"
+                ],
+                correct: 1,
+                explanation: "Incendiary devices are weapons that produce heat and fire through chemical reaction of a flammable substance. They are often referred to as firebombs."
+            },
+            {
+                number: 37,
+                text: "What is the main use of incendiary devices in terrorism?",
+                options: [
+                    "To destroy buildings only",
+                    "Generate panic (weapon of mass disruption) but also capable of causing loss of life and property damage",
+                    "Create smoke screens",
+                    "Signal for help"
+                ],
+                correct: 1,
+                explanation: "The main use of incendiary devices in terrorism is to generate panic (a weapon of mass disruption); however, they are also capable of causing loss of life and property damage from fire."
+            },
+            {
+                number: 38,
+                text: "What special concern does white phosphorus present?",
+                options: [
+                    "It's radioactive",
+                    "Ignites when exposed to oxygen above 84°F; highly soluble in human fat; can reignite when bandages removed",
+                    "Only burns at extremely high temperatures",
+                    "Cannot be extinguished"
+                ],
+                correct: 1,
+                explanation: "White phosphorus ignites when exposed to oxygen at temperatures above 84°F (30°C), is highly soluble in human fat causing deep thermal and chemical burns, and can reignite when bandages are removed due to reexposure to oxygen."
+            },
+            {
+                number: 39,
+                text: "What are nerve agents?",
+                options: [
+                    "Agents that only affect the brain",
+                    "The most toxic and rapidly acting of known chemical warfare agents; similar to organophosphates but more potent",
+                    "Slow-acting poisons",
+                    "Non-lethal irritants"
+                ],
+                correct: 1,
+                explanation: "Nerve agents are the most toxic and rapidly acting of the known chemical warfare agents. They are similar to organophosphates (but more potent) in their mechanism of action and harmful effects."
+            },
+            {
+                number: 40,
+                text: "Which nerve agent is described as a clear, colorless, tasteless liquid with no odor in pure form?",
+                options: [
+                    "VX",
+                    "Soman",
+                    "Sarin (GB)",
+                    "Tabun"
+                ],
+                correct: 2,
+                explanation: "Sarin (also known as GB) is a clear, colorless, and tasteless liquid that has no odor in its pure form. It can evaporate into vapor and mixes easily with water."
+            },
+            {
+                number: 41,
+                text: "Which nerve agent has a slight camphor odor similar to Vicks VapoRub or rotting fruit?",
+                options: [
+                    "Sarin",
+                    "Soman (GD)",
+                    "Tabun",
+                    "VX"
+                ],
+                correct: 1,
+                explanation: "Soman (also known as GD) is a clear, colorless, tasteless liquid with a slight camphor odor similar to topical cough suppressant (Vicks VapoRub) or rotting fruit."
+            },
+            {
+                number: 42,
+                text: "Which nerve agent is described as thick, amber-colored, odorless, and the most potent?",
+                options: [
+                    "Sarin",
+                    "Soman",
+                    "Tabun",
+                    "VX"
+                ],
+                correct: 3,
+                explanation: "VX is a thick, amber-colored, odorless liquid that resembles motor oil and is the most potent of all nerve agents. It is much more toxic when absorbed through the skin."
+            },
+            {
+                number: 43,
+                text: "What are the antidotes for nerve agent toxicity?",
+                options: [
+                    "Oxygen and epinephrine",
+                    "Atropine and pralidoxime chloride",
+                    "Naloxone and flumazenil",
+                    "Activated charcoal and sodium bicarbonate"
+                ],
+                correct: 1,
+                explanation: "Atropine and pralidoxime chloride are antidotes for nerve agent toxicity. They are available in autoinjector kits."
+            },
+            {
+                number: 44,
+                text: "What color is chlorine gas and what does it smell like?",
+                options: [
+                    "Clear with no odor",
+                    "Yellow-green with mixture of pineapple and pepper odor",
+                    "Gray-white with hay smell",
+                    "Amber with fruity smell"
+                ],
+                correct: 1,
+                explanation: "Chlorine is a yellow-green gas with an odor that has been described as a mixture of pineapple and pepper."
+            },
+            {
+                number: 45,
+                text: "What does phosgene (CG) look like and smell like?",
+                options: [
+                    "Yellow-green with pineapple smell",
+                    "Clear with no odor",
+                    "Gray-white cloud that smells like newly mowed hay",
+                    "Amber with pepper smell"
+                ],
+                correct: 2,
+                explanation: "Phosgene (CG) is a poisonous gas that appears as a gray-white cloud and smells like newly mowed hay."
+            },
+            {
+                number: 46,
+                text: "Is there an antidote for chlorine or phosgene poisoning?",
+                options: [
+                    "Yes, atropine works",
+                    "No antidotes exist; treatment is supportive (move to fresh air, decontaminate, bronchodilators, steroids)",
+                    "Only pralidoxime works",
+                    "Naloxone is effective"
+                ],
+                correct: 1,
+                explanation: "No antidotes exist for chlorine or phosgene poisoning. Treatment consists of moving patients to fresh air, decontamination, and supportive care including bronchodilators, steroids, and ventilatory support."
+            },
+            {
+                number: 47,
+                text: "What are blister agents (vesicants)?",
+                options: [
+                    "Agents that only affect the eyes",
+                    "Chemicals with highly irritating properties that produce fluid-filled pockets on skin and damage eyes, lungs, mucous membranes",
+                    "Non-toxic skin irritants",
+                    "Agents that only cause redness"
+                ],
+                correct: 1,
+                explanation: "Blister agents or vesicants are chemicals with highly irritating properties that produce fluid-filled pockets on the skin and damage to the eyes, lungs, and other mucous membranes. They can cause vision loss, convulsions, and respiratory failure."
+            },
+            {
+                number: 48,
+                text: "What does the THREAT acronym stand for in active shooter/mass casualty incidents?",
+                options: [
+                    "Trauma, Hemorrhage, Rescue, Emergency, Assessment, Transport",
+                    "Threat suppression, Hemorrhage control, Rapid Extrication, Assess patient, Transport",
+                    "Triage, Help, Rescue, Evacuate, Alert, Treat",
+                    "Time, Hazard, Response, Evacuation, Action, Treatment"
+                ],
+                correct: 1,
+                explanation: "The THREAT acronym stands for: Threat suppression, Hemorrhage control, Rapid Extrication, Assess patient, and Transport to the hospital."
+            },
+            {
+                number: 49,
+                text: "When was the Department of Homeland Security (DHS) established?",
+                options: [
+                    "1995",
+                    "After September 11, 2001 attacks through Homeland Security Act of 2002",
+                    "1985",
+                    "2010"
+                ],
+                correct: 1,
+                explanation: "Following the terrorist attacks on the World Trade Center in New York City on September 11, 2001, the DHS was established through the Homeland Security Act of 2002."
+            },
+            {
+                number: 50,
+                text: "What are significant differences between WMD incidents and other emergencies?",
+                options: [
+                    "No differences exist",
+                    "Terrorists time secondary events to injure responders; site is a crime scene; requires contingency plans for large numbers of patients",
+                    "Only the equipment differs",
+                    "Response time is faster"
+                ],
+                correct: 1,
+                explanation: "Significant differences include: (1) Terrorists time secondary events to injure emergency responders, (2) A terrorist act is a criminal event so the site is a crime scene and everything is evidence, (3) Contingency plans are needed for large numbers of upset, agitated, frightened, and injured patients involving local, state, and federal agencies."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let studentName = "";
+        let answeredQuestions = [];
+
+        function startScenario() {
+            studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('Please enter your name before starting.');
+                return;
+            }
+            
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showCertificate();
+                return;
+            }
+
+            const container = document.getElementById('questionsContainer');
+            const q = questions[currentQuestion];
+            
+            const questionHTML = `
+                <div class="question-container active" id="question${currentQuestion}">
+                    <div class="question">
+                        <div class="question-number">Question ${q.number} of 50</div>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options" id="options${currentQuestion}">
+                            ${q.options.map((option, index) => `
+                                <div class="option" onclick="selectAnswer(${currentQuestion}, ${index})">
+                                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                    <div>${option}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback${currentQuestion}"></div>
+                        <div class="btn-container" style="display: none;" id="nextBtn${currentQuestion}">
+                            <button class="btn" onclick="nextQuestion()">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += questionHTML;
+            updateProgress();
+        }
+
+        function selectAnswer(questionIndex, selectedIndex) {
+            const q = questions[questionIndex];
+            const options = document.querySelectorAll(`#options${questionIndex} .option`);
+            const feedback = document.getElementById(`feedback${questionIndex}`);
+            const nextBtn = document.getElementById(`nextBtn${questionIndex}`);
+            
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            const isCorrect = selectedIndex === q.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+                options[selectedIndex].classList.add('correct');
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✓ Correct!</div>
+                    <p>${q.explanation}</p>
+                `;
+            } else {
+                options[selectedIndex].classList.add('incorrect');
+                options[q.correct].classList.add('correct');
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✗ Incorrect</div>
+                    <p><strong>The correct answer is: ${String.fromCharCode(65 + q.correct)}) ${q.options[q.correct]}</strong></p>
+                    <p>${q.explanation}</p>
+                `;
+            }
+            
+            answeredQuestions.push({
+                question: q.number,
+                correct: isCorrect
+            });
+            
+            nextBtn.style.display = 'block';
+            updateScoreboard();
+        }
+
+        function nextQuestion() {
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progress').textContent = `${currentQuestion + 1}/50`;
+        }
+
+        function updateScoreboard() {
+            document.getElementById('correct').textContent = correctAnswers;
+            const percentage = Math.round((correctAnswers / (currentQuestion + 1)) * 100);
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function showCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date();
+            const dateString = today.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('certificate').classList.add('show');
+            document.getElementById('certName').textContent = studentName;
+            document.getElementById('certScore').textContent = percentage + '%';
+            document.getElementById('certDate').textContent = dateString;
+            
+            document.getElementById('progress').textContent = '50/50';
+            document.getElementById('correct').textContent = correctAnswers;
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function downloadCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date().toLocaleDateString('en-US');
+            
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>EMS 210 Week 4 Certificate</title>
+                    <style>
+                        body {
+                            font-family: Georgia, serif;
+                            padding: 40px;
+                            text-align: center;
+                        }
+                        .cert-border {
+                            border: 10px double #ee0979;
+                            padding: 60px;
+                            margin: 20px;
+                        }
+                        h1 { 
+                            color: #ee0979; 
+                            font-size: 42px; 
+                            margin-bottom: 30px;
+                        }
+                        .student-name {
+                            font-size: 32px;
+                            font-weight: bold;
+                            color: #ee0979;
+                            margin: 30px 0;
+                            border-bottom: 3px solid #ee0979;
+                            display: inline-block;
+                            padding: 10px 40px;
+                        }
+                        .score {
+                            font-size: 72px;
+                            font-weight: bold;
+                            color: #28a745;
+                            margin: 40px 0;
+                        }
+                        .details {
+                            font-size: 18px;
+                            line-height: 2;
+                            margin: 20px 0;
+                        }
+                        .footer {
+                            margin-top: 60px;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="cert-border">
+                        <h1>Certificate of Completion</h1>
+                        <p class="details">This certifies that</p>
+                        <div class="student-name">${studentName}</div>
+                        <p class="details">has successfully completed</p>
+                        <p class="details"><strong>EMS 210 - Week 4 Interactive Scenario</strong></p>
+                        <p class="details">Bioterrorism and Weapons of Mass Destruction</p>
+                        <p class="details">Chapter 57</p>
+                        <div class="score">${percentage}%</div>
+                        <p class="details">Score: ${correctAnswers} out of 50 questions correct</p>
+                        <p class="details">${today}</p>
+                        <div class="footer">
+                            <p>This certificate should be uploaded to Canvas for credit.</p>
+                            <p>EMS 210 - EMS Operations | February 2026</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
+    </script>
+</body>
+</html>
