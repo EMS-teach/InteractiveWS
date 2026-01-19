@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS 210 - Week 2 Interactive Scenario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #c31432 0%, #240b36 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .score-bar {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .score-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c31432;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .intro-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .intro-screen h2 {
+            color: #c31432;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .intro-screen p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #495057;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .scenario-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #c31432;
+        }
+        
+        .question-number {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover {
+            border-color: #c31432;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .option-letter {
+            background: #c31432;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            pointer-events: none;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            pointer-events: none;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .feedback-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #c31432;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background: #240b36;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .certificate {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .certificate.show {
+            display: block;
+        }
+        
+        .certificate-border {
+            border: 8px double #c31432;
+            padding: 40px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .certificate h2 {
+            color: #c31432;
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-family: Georgia, serif;
+        }
+        
+        .certificate-text {
+            font-size: 18px;
+            line-height: 2;
+            color: #495057;
+            margin: 20px 0;
+        }
+        
+        .certificate-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #c31432;
+            margin: 30px 0;
+            padding: 10px;
+            border-bottom: 2px solid #c31432;
+            display: inline-block;
+        }
+        
+        .certificate-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 30px 0;
+        }
+        
+        .certificate-date {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 30px;
+        }
+        
+        .download-btn {
+            background: #28a745;
+            margin-top: 30px;
+        }
+        
+        .download-btn:hover {
+            background: #218838;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c31432 0%, #f5576c 100%);
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .name-input:focus {
+            outline: none;
+            border-color: #c31432;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EMS 210 - Week 2 Interactive Scenario</h1>
+            <p>Rescue Operations & Crime Scene Awareness</p>
+            <p>Chapters 54 & 55</p>
+        </div>
+        
+        <div class="score-bar">
+            <div class="score-item">
+                <div class="score-label">Progress</div>
+                <div class="score-value" id="progress">0/50</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct</div>
+                <div class="score-value" id="correct">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Score</div>
+                <div class="score-value" id="score">0%</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Intro Screen -->
+            <div id="intro" class="intro-screen">
+                <h2>Welcome, Paramedic</h2>
+                <p>You are about to engage in a comprehensive review of rescue operations and crime scene awareness. This interactive scenario contains 50 questions based on real-world operational situations.</p>
+                
+                <div class="scenario-box">
+                    <h3>⚠️ Safety Warning</h3>
+                    <p>These scenarios involve high-risk situations. In the field, your personal safety is ALWAYS the first priority.</p>
+                </div>
+                
+                <div class="scenario-box">
+                    <h3>Instructions</h3>
+                    <p><strong>• Answer all 50 multiple-choice questions</strong></p>
+                    <p><strong>• Immediate feedback will be provided for each answer</strong></p>
+                    <p><strong>• Your final score will be calculated at the end</strong></p>
+                    <p><strong>• A completion certificate will be generated for Canvas submission</strong></p>
+                </div>
+                
+                <label for="studentName" style="display: block; margin-top: 30px; font-weight: 600; color: #c31432;">Enter Your Name:</label>
+                <input type="text" id="studentName" class="name-input" placeholder="First and Last Name" required>
+                
+                <div class="btn-container">
+                    <button class="btn" onclick="startScenario()">Begin Scenario</button>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div id="progressBar" class="progress-bar" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            
+            <!-- Questions Container -->
+            <div id="questionsContainer"></div>
+            
+            <!-- Certificate -->
+            <div id="certificate" class="certificate">
+                <div class="certificate-border">
+                    <h2>Certificate of Completion</h2>
+                    <p class="certificate-text">This certifies that</p>
+                    <div class="certificate-name" id="certName"></div>
+                    <p class="certificate-text">has successfully completed</p>
+                    <p class="certificate-text"><strong>EMS 210 - Week 2 Interactive Scenario</strong></p>
+                    <p class="certificate-text">Rescue Operations & Crime Scene Awareness</p>
+                    <div class="certificate-score" id="certScore"></div>
+                    <p class="certificate-date" id="certDate"></p>
+                    <button class="btn download-btn" onclick="downloadCertificate()">Download Certificate</button>
+                    <p style="margin-top: 20px; font-size: 14px; color: #6c757d;">Upload this certificate to Canvas to receive credit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Chapter 54: Rescue Awareness and Operations (1-25)
+            {
+                number: 1,
+                text: "What are the THREE priorities for safety in any rescue operation, in order?",
+                options: [
+                    "Patient safety, crew safety, bystander safety",
+                    "Personal safety, crew safety, bystanders, then patient",
+                    "Scene safety, equipment safety, patient safety",
+                    "Command safety, operations safety, logistics safety"
+                ],
+                correct: 1,
+                explanation: "The priorities for safety in any rescue are: (1) Personal safety, (2) Safety of the crew, (3) Safety of bystanders, (4) Rescue of the trapped and injured. You cannot help others if you become a victim."
+            },
+            {
+                number: 2,
+                text: "What are the SEVEN phases of a rescue operation?",
+                options: [
+                    "Response, arrival, treatment, transport, documentation, debrief, cleanup",
+                    "Arrival/size-up, hazard control, access, medical treatment, disentanglement, packaging, transport",
+                    "Command, operations, planning, logistics, finance, safety, liaison",
+                    "Triage, treatment, transport, tracking, termination, training, testing"
+                ],
+                correct: 1,
+                explanation: "The seven phases are: (1) Arrival and scene size-up, (2) Hazard control, (3) Gaining access to patient, (4) Medical treatment, (5) Disentanglement, (6) Patient packaging, (7) Transport."
+            },
+            {
+                number: 3,
+                text: "During which phase of rescue should paramedics NOT enter the scene?",
+                options: [
+                    "After hazard control is complete",
+                    "Until the scene has been secured and made safe by trained personnel",
+                    "After the IC gives permission",
+                    "Never - paramedics should always enter immediately"
+                ],
+                correct: 1,
+                explanation: "Paramedics should not enter a scene until it has been secured and made safe by trained personnel. Personal safety is always the top priority."
+            },
+            {
+                number: 4,
+                text: "What is the 'team concept' in rescue operations?",
+                options: [
+                    "Everyone does the same job",
+                    "Medical and mechanical skills are carefully balanced through coordinated effort",
+                    "Fire department handles all rescues",
+                    "Only specially trained teams can perform rescues"
+                ],
+                correct: 1,
+                explanation: "The team concept is the coordinated effort between medical care and specialized rescue efforts, carefully balancing medical and mechanical skills for optimal patient outcomes."
+            },
+            {
+                number: 5,
+                text: "At minimum, what PPE should EMS providers have access to for rescue operations?",
+                options: [
+                    "Gloves and goggles only",
+                    "Impact-resistant helmet, safety goggles, protective coat/pants, slip-resistant gloves, steel-toe boots",
+                    "Turnout gear from fire department",
+                    "Level A hazmat suit"
+                ],
+                correct: 1,
+                explanation: "Minimum PPE includes: impact-resistant helmet with ear protection and chinstrap, safety goggles with elastic strap, protective outer coat and pants, slip-resistant waterproof gloves, and boots with steel insoles and toe protection."
+            },
+            {
+                number: 6,
+                text: "What is the minimum recommended area size for a helicopter landing zone?",
+                options: [
+                    "50 x 50 feet",
+                    "75 x 75 feet",
+                    "100 x 100 feet",
+                    "200 x 200 feet"
+                ],
+                correct: 2,
+                explanation: "The ideal space requirement for a helicopter LZ is generally 100 x 100 feet with no overhead wires or vertical structures, relatively flat (less than 10° slope), and free of debris."
+            },
+            {
+                number: 7,
+                text: "When approaching a helicopter, from which direction should you NEVER approach?",
+                options: [
+                    "Front",
+                    "Sides",
+                    "Rear (tail rotor area)",
+                    "Any direction in a crouched position is safe"
+                ],
+                correct: 2,
+                explanation: "Never approach the rear of the aircraft from any direction due to the tail rotor. Always approach from the front in a crouched position, staying in view of the pilot."
+            },
+            {
+                number: 8,
+                text: "What does 'surface water rescue' refer to?",
+                options: [
+                    "Any water rescue",
+                    "Rescue of a patient afloat on the surface of a body of water",
+                    "Underwater diving rescue",
+                    "Ice rescue only"
+                ],
+                correct: 1,
+                explanation: "Surface water rescue is the rescue of a patient who is afloat on the surface of a body of water. It is very dangerous and requires special training."
+            },
+            {
+                number: 9,
+                text: "What is the recommended water rescue model sequence?",
+                options: [
+                    "Go, throw, row, reach",
+                    "Reach, throw, row, go",
+                    "Throw, reach, go, row",
+                    "Row, reach, throw, go"
+                ],
+                correct: 1,
+                explanation: "The recommended water rescue model is: Reach (use something to extend reach), Throw (throw flotation device), Row (use boat if available), Go (enter water as last resort - only if specially trained)."
+            },
+            {
+                number: 10,
+                text: "What is a 'strainer' in water rescue terminology?",
+                options: [
+                    "A rescue device",
+                    "A type of current",
+                    "Obstructions that allow current through but trap objects/people",
+                    "A water filtration system"
+                ],
+                correct: 2,
+                explanation: "Strainers are obstructions (trees, grating, wire, mesh) that allow current to flow through but can trap objects such as boats or people. The force of water makes escape very difficult."
+            },
+            {
+                number: 11,
+                text: "At what depth is it generally considered unsafe to walk in fast-moving water?",
+                options: [
+                    "Ankle deep",
+                    "Deeper than knee height",
+                    "Waist deep",
+                    "Any depth is safe"
+                ],
+                correct: 1,
+                explanation: "It is generally considered unsafe to walk in fast-moving water that is deeper than knee height due to risk of foot/extremity entrapment and the power of moving water."
+            },
+            {
+                number: 12,
+                text: "What does the acronym HELP stand for in water rescue?",
+                options: [
+                    "Heat Escape Lessening Position",
+                    "Helicopter Emergency Landing Procedures",
+                    "Hazard Evaluation and Location Protocol",
+                    "Hypothermia Emergency Life Preservation"
+                ],
+                correct: 0,
+                explanation: "HELP stands for Heat Escape Lessening Position - a position assumed in flat water to conserve body heat by pulling knees to chest and keeping arms close to body."
+            },
+            {
+                number: 13,
+                text: "What are the SIX major hazards associated with confined spaces according to OSHA?",
+                options: [
+                    "Heat, cold, noise, darkness, confined area, depth",
+                    "Oxygen-deficient atmospheres, chemical/toxic exposure, engulfment, machinery entrapment, electricity, structural concerns",
+                    "Fire, explosion, collapse, drowning, electrocution, asphyxiation",
+                    "Limited access, poor visibility, communication issues, equipment failure, fatigue, dehydration"
+                ],
+                correct: 1,
+                explanation: "The six major hazards are: (1) Oxygen-deficient atmospheres, (2) Chemical/toxic exposure or explosion, (3) Engulfment, (4) Machinery entrapment, (5) Electricity, (6) Structural concerns."
+            },
+            {
+                number: 14,
+                text: "What defines a 'confined space'?",
+                options: [
+                    "Any small room",
+                    "Limited access/egress, not designed for human occupancy or habitation",
+                    "Underground areas only",
+                    "Spaces requiring a permit"
+                ],
+                correct: 1,
+                explanation: "Confined spaces have limited access or egress and are not designed for human occupancy or habitation. Examples include tanks, silos, manholes, and trenches."
+            },
+            {
+                number: 15,
+                text: "What type of breathing apparatus is preferred for confined-space operations?",
+                options: [
+                    "Standard SCBA (bottle on back)",
+                    "Air purification respirators",
+                    "Supplied-air breathing apparatus (SABA/air-line)",
+                    "N95 masks"
+                ],
+                correct: 2,
+                explanation: "Supplied-air breathing apparatus (SABA) is preferred for confined spaces because it provides nearly unlimited air from an external source and includes an escape bottle, avoiding entrapment issues with standard SCBA."
+            },
+            {
+                number: 16,
+                text: "What is 'compartment syndrome' in the context of rescue operations?",
+                options: [
+                    "A storage issue",
+                    "Ischemic muscle damage from prolonged compression causing tissue necrosis",
+                    "A type of confined space",
+                    "A vehicle design feature"
+                ],
+                correct: 1,
+                explanation: "Compartment syndrome is caused by crushing mechanisms leading to ischemic muscle damage, tissue necrosis, and potentially crush syndrome. It can lead to life-threatening complications upon release."
+            },
+            {
+                number: 17,
+                text: "Most trench collapses occur in trenches of what depth?",
+                options: [
+                    "Less than 3 feet deep",
+                    "3-6 feet deep",
+                    "Less than 12 feet deep and 6 feet wide",
+                    "Over 20 feet deep"
+                ],
+                correct: 2,
+                explanation: "Most trench collapses occur in trenches less than 12 feet (4 m) deep and 6 feet (2 m) wide, often when contractors avoid required safety measures."
+            },
+            {
+                number: 18,
+                text: "At what depth does federal law require either shoring or a trench box?",
+                options: [
+                    "3 feet or deeper",
+                    "4 feet or deeper",
+                    "5 feet or deeper",
+                    "6 feet or deeper"
+                ],
+                correct: 2,
+                explanation: "Federal law requires either shoring or a trench box for excavations that are 5 feet (3 m) or deeper to prevent collapse."
+            },
+            {
+                number: 19,
+                text: "When should EMS personnel attempt a rescue in a collapsed trench?",
+                options: [
+                    "Immediately to save time",
+                    "Only if trench is less than waist deep",
+                    "After shoring is in place by trained personnel",
+                    "Never - wait for specialized teams always"
+                ],
+                correct: 1,
+                explanation: "EMS personnel should not attempt rescue unless the trench is less than waist deep. Otherwise, they must wait for proper shoring by trained personnel. A second collapse is likely."
+            },
+            {
+                number: 20,
+                text: "What is the 'fend-off position' in highway operations?",
+                options: [
+                    "Parking parallel to traffic flow",
+                    "Blocking the scene - vehicle angled toward opposing traffic to protect scene and deflect drivers",
+                    "Parking 100 feet past the scene",
+                    "Parking in the median"
+                ],
+                correct: 1,
+                explanation: "The fend-off position is when an apparatus (pumper, rescue, ambulance) is positioned across the traffic direction, angled toward opposing traffic to protect the scene and deflect drivers away from the incident."
+            },
+            {
+                number: 21,
+                text: "When should the battery of a crashed vehicle be disconnected?",
+                options: [
+                    "Immediately upon arrival",
+                    "After ensuring power doors, windows, and seat mechanisms don't need to be operated",
+                    "Never - always leave connected",
+                    "Only if fire is present"
+                ],
+                correct: 1,
+                explanation: "The battery generally should be left connected so power electric door locks, windows, seat mechanisms, and trunks can be operated. If it must be disabled, disconnect the ground cable first to reduce sparking."
+            },
+            {
+                number: 22,
+                text: "How can hybrid-electric vehicles often be identified at crash scenes?",
+                options: [
+                    "They look exactly like regular cars with no distinguishing features",
+                    "Hybrid label and orange sleeves covering components under hood, rear, and undercarriage",
+                    "Always marked 'HYBRID' on the bumper",
+                    "They make loud noises"
+                ],
+                correct: 1,
+                explanation: "Hybrid-electric vehicles can often be identified by a hybrid label and the presence of orange sleeves that cover high-voltage components under the hood, in the rear, and under the car."
+            },
+            {
+                number: 23,
+                text: "What should you NEVER do with orange cables/components in a hybrid vehicle?",
+                options: [
+                    "Look at them",
+                    "Touch, cut, or open any orange cable or components",
+                    "Photograph them",
+                    "Report them to command"
+                ],
+                correct: 1,
+                explanation: "Never touch, cut, or open any orange cable or components protected by orange sleeves. Always consider a high-voltage cable to be live or hot - they can deliver lethal voltage."
+            },
+            {
+                number: 24,
+                text: "What is 'low-angle' terrain in rescue operations?",
+                options: [
+                    "Completely flat ground",
+                    "Terrain that can be walked on without using hands; weight supported by ground",
+                    "Any slope over 45 degrees",
+                    "Vertical terrain"
+                ],
+                correct: 1,
+                explanation: "Low-angle (steep slope) terrain can be walked on without using the hands for balance. The rescuer's weight is supported by the ground, though specialized equipment may still be needed."
+            },
+            {
+                number: 25,
+                text: "What is 'high-angle' terrain in rescue operations?",
+                options: [
+                    "Slopes of 15-30 degrees",
+                    "Slopes of 30-45 degrees",
+                    "Terrain so steep hands must be used; slope over 60° - weight supported by rope",
+                    "Any terrain requiring equipment"
+                ],
+                correct: 2,
+                explanation: "High-angle (vertical) terrain is so steep the hands must be used to maintain balance, typically slopes of more than 60°. Rescuers are completely dependent on rope or aerial apparatus - weight is supported by rope."
+            },
+
+            // Chapter 55: Crime Scene Awareness (26-50)
+            {
+                number: 26,
+                text: "When does scene size-up for safety begin?",
+                options: [
+                    "Upon arrival at the scene",
+                    "Before arrival - with information from dispatch and observation several blocks away",
+                    "After exiting the ambulance",
+                    "After patient contact"
+                ],
+                correct: 1,
+                explanation: "Scene size-up begins before arrival with information from dispatch and observation several blocks from the scene. This allows you to identify potential dangers early."
+            },
+            {
+                number: 27,
+                text: "What information from dispatch should alert you to potential dangers?",
+                options: [
+                    "Patient's age only",
+                    "Known unsafe locations, large crowds, violence, weapons, drugs/alcohol",
+                    "Time of day only",
+                    "Patient's chief complaint only"
+                ],
+                correct: 1,
+                explanation: "Dispatch information indicating potential danger includes: known locations of unsafe scenes, large crowds, people under influence of drugs/alcohol, on-scene violence, and presence of weapons."
+            },
+            {
+                number: 28,
+                text: "If a scene is known to be violent, what should you do?",
+                options: [
+                    "Enter quickly to help patients",
+                    "Remain at a safe, out-of-sight distance until scene is secured ('out of sight, out of scene')",
+                    "Enter with police immediately",
+                    "Cancel the call"
+                ],
+                correct: 1,
+                explanation: "If the scene is known to be violent, remain at a safe, out-of-sight distance from the area until it has been secured. The phrase is 'out of sight, out of scene.'"
+            },
+            {
+                number: 29,
+                text: "What are warning signs of danger in residential calls?",
+                options: [
+                    "Well-lit homes only",
+                    "History of violence, known drug/gang area, loud noises, acts of violence, alcohol/drugs, unusual silence",
+                    "Time of day only",
+                    "Number of occupants"
+                ],
+                correct: 1,
+                explanation: "Warning signs include: history of problems/violence, known drug or gang area, loud noises (screams, breaking items, gunshots), seeing/hearing violence, presence of alcohol/drugs, dangerous pets, unusual silence, or darkened residence."
+            },
+            {
+                number: 30,
+                text: "When approaching a residence, on which side of the door should you stand?",
+                options: [
+                    "Directly in front of the door",
+                    "On the side opposite the hinges (doorknob side)",
+                    "On the hinge side",
+                    "It doesn't matter"
+                ],
+                correct: 1,
+                explanation: "Stand on the side of the entry door opposite the hinges (doorknob side). This provides some protection if someone fires through the door."
+            },
+            {
+                number: 31,
+                text: "What is 'backlighting' and why should you avoid it?",
+                options: [
+                    "Using flashlights incorrectly",
+                    "Positioning yourself between ambulance lights and residence - makes you a silhouette target",
+                    "Standing in shadows",
+                    "Not using enough light"
+                ],
+                correct: 1,
+                explanation: "Backlighting occurs when you position yourself between the ambulance lights and the residence, making you a clearly visible silhouette and potential target."
+            },
+            {
+                number: 32,
+                text: "When approaching a vehicle at a highway incident, what approach is recommended?",
+                options: [
+                    "Driver's side approach with two people",
+                    "One-person approach from passenger side",
+                    "Front approach",
+                    "Rear approach"
+                ],
+                correct: 1,
+                explanation: "When approaching a vehicle, a one-person approach from the passenger side of the vehicle is recommended. The approaching paramedic should observe from behind post B before moving forward."
+            },
+            {
+                number: 33,
+                text: "What does it mean if a vehicle passenger is adjusting mirrors as you approach?",
+                options: [
+                    "They're being helpful",
+                    "Sign of danger - they're watching you; retreat to safety",
+                    "Normal behavior",
+                    "They didn't notice you"
+                ],
+                correct: 1,
+                explanation: "If a passenger is adjusting the side or rearview mirror as you approach, this is a sign of danger. They are tracking your movements. Retreat to safety immediately."
+            },
+            {
+                number: 34,
+                text: "What should you do if a vehicle trunk is slightly open or unlatched?",
+                options: [
+                    "Open it fully to investigate",
+                    "Slam it shut without opening it further",
+                    "Leave it alone",
+                    "Ask the driver to open it"
+                ],
+                correct: 1,
+                explanation: "If the trunk is slightly open, slam it shut without opening it further. Open trunks may indicate people hiding or restrained in the compartment."
+            },
+            {
+                number: 35,
+                text: "What are warning signs of escalating danger at violent street incidents?",
+                options: [
+                    "Silence and calm",
+                    "Voices becoming louder/escalating, pushing/shoving, hostility, property destruction, growing crowd, inability of police to control",
+                    "People leaving the area",
+                    "Good lighting"
+                ],
+                correct: 1,
+                explanation: "Warning signs include: voices becoming louder/escalating in tone, pushing and shoving, hostility toward people on scene, destruction of property, rapid increase in crowd size, use of alcohol/drugs, and inability of law enforcement to control the crowd."
+            },
+            {
+                number: 36,
+                text: "What is 'gang graffiti' also known as?",
+                options: [
+                    "Street art",
+                    "Tagging",
+                    "Murals",
+                    "Vandalism only"
+                ],
+                correct: 1,
+                explanation: "Gang graffiti is often referred to as 'tagging.' It is a visible sign of gang criminal activity and usually marks territorial boundaries known as 'turf.'"
+            },
+            {
+                number: 37,
+                text: "What are common gang activities that create safety concerns for EMS?",
+                options: [
+                    "Community service only",
+                    "Fighting, vandalism, armed robbery, weapons offenses, auto theft, battery, trafficking, prostitution, drugs",
+                    "Legal business operations",
+                    "Political activism"
+                ],
+                correct: 1,
+                explanation: "Common gang activities include: fighting, vandalism, armed robbery, weapon offenses, auto theft, battery, human trafficking, alien smuggling, prostitution, and drug dealing or transport."
+            },
+            {
+                number: 38,
+                text: "What is a 'clandestine drug lab'?",
+                options: [
+                    "A legal pharmaceutical facility",
+                    "Illegal drug manufacturing site; creating drugs from chemical precursors",
+                    "A drug treatment center",
+                    "A police evidence room"
+                ],
+                correct: 1,
+                explanation: "A clandestine drug lab is an illegal facility where drugs are synthesized (created) from chemical precursors, such as LSD or methamphetamine. These labs pose significant hazards."
+            },
+            {
+                number: 39,
+                text: "If you identify a clandestine drug lab, what should you do?",
+                options: [
+                    "Continue patient care inside",
+                    "Leave immediately, notify law enforcement, initiate ICS and hazmat procedures, evacuate area",
+                    "Photograph it for evidence",
+                    "Search for victims"
+                ],
+                correct: 1,
+                explanation: "If you identify a drug lab: (1) Leave the area at once, (2) Notify law enforcement, (3) Initiate ICS and hazmat procedures per protocol, (4) Assist in orderly evacuation of surrounding area."
+            },
+            {
+                number: 40,
+                text: "What are signs of intimate partner violence?",
+                options: [
+                    "Happy, cooperative patients",
+                    "Apparent fear, conflicting accounts, one party preventing another from speaking, reluctance to speak, injuries not matching MOI",
+                    "Clean, well-organized homes",
+                    "Patients who have identification"
+                ],
+                correct: 1,
+                explanation: "Signs include: apparent fear of household member, different/conflicting accounts, one party preventing another from speaking, patient reluctant to speak, injuries not matching reported mechanism, unusual living conditions, inability to produce identification."
+            },
+            {
+                number: 41,
+                text: "What are the four main safety tactics EMS personnel can use?",
+                options: [
+                    "Fight, flight, freeze, follow",
+                    "Avoidance, tactical retreat, cover and concealment, distraction and evasive maneuvers",
+                    "Run, hide, fight, call",
+                    "Assess, retreat, communicate, document"
+                ],
+                correct: 1,
+                explanation: "The four main safety tactics are: (1) Avoidance, (2) Tactical retreat, (3) Cover and concealment, (4) Distraction and evasive maneuvers."
+            },
+            {
+                number: 42,
+                text: "What is 'avoidance' in EMS safety tactics?",
+                options: [
+                    "Refusing to respond to calls",
+                    "Keeping away from dangerous situations or preventing development of dangerous situations; always preferable to confrontation",
+                    "Running away from all scenes",
+                    "Hiding from patients"
+                ],
+                correct: 1,
+                explanation: "Avoidance is the act of keeping away from a dangerous situation or preventing the development of a dangerous situation. It is always preferable to confrontation. Staging is an example of avoidance."
+            },
+            {
+                number: 43,
+                text: "What is 'tactical retreat'?",
+                options: [
+                    "Abandoning patients",
+                    "Leaving the scene when danger is observed; moving to safe distance",
+                    "Calling for backup",
+                    "Refusing calls"
+                ],
+                correct: 1,
+                explanation: "Tactical retreat is leaving the scene when danger is observed or when violence/indicators of violence are displayed. Move to a safe distance and notify other responding units and agencies."
+            },
+            {
+                number: 44,
+                text: "What determines a 'safe distance' during tactical retreat?",
+                options: [
+                    "100 feet minimum always",
+                    "Distance that protects from danger, keeps you out of sight, provides cover from gunfire, gives time to react",
+                    "Whatever distance feels comfortable",
+                    "Distance recommended by dispatch"
+                ],
+                correct: 1,
+                explanation: "Safe distance is judged by conditions that: (1) Protect from potential danger, (2) Keep you out of immediate line of sight, (3) Provide cover from gunfire, (4) Give you time to react if danger reappears."
+            },
+            {
+                number: 45,
+                text: "What is the difference between 'cover' and 'concealment'?",
+                options: [
+                    "They are the same thing",
+                    "Cover protects from gunfire; concealment only hides you from view",
+                    "Concealment is stronger than cover",
+                    "Cover is temporary, concealment is permanent"
+                ],
+                correct: 1,
+                explanation: "Cover provides protection from injury (can stop bullets). Concealment only hides you from view but provides no ballistic protection. Examples: cover = concrete wall; concealment = bushes."
+            },
+            {
+                number: 46,
+                text: "What does TEMS stand for?",
+                options: [
+                    "Trauma Emergency Medical Services",
+                    "Tactical EMS",
+                    "Total Emergency Management System",
+                    "Transport and Emergency Medical Support"
+                ],
+                correct: 1,
+                explanation: "TEMS stands for Tactical EMS - specialized EMS providers trained and equipped to work in tactical law enforcement settings such as SWAT operations."
+            },
+            {
+                number: 47,
+                text: "What is 'tactical patient care'?",
+                options: [
+                    "Advanced life support procedures",
+                    "Patient care activities inside the scene perimeter where direct or indirect threat exists",
+                    "Treating law enforcement officers only",
+                    "Military medicine"
+                ],
+                correct: 1,
+                explanation: "Tactical patient care describes patient care activities that occur inside the scene perimeter where there is a direct or indirect threat. It requires special training, authorization, and equipment."
+            },
+            {
+                number: 48,
+                text: "What is the 'hot zone' in tactical operations?",
+                options: [
+                    "An area with high temperature",
+                    "The area where a direct threat exists",
+                    "The treatment area",
+                    "The staging area"
+                ],
+                correct: 1,
+                explanation: "In tactical operations, the hot zone is an area where a direct threat exists. Provision of tactical patient care inside this area requires special training, body armor, and in some cases, defensive weapons."
+            },
+            {
+                number: 49,
+                text: "What is the ultimate priority for paramedics at a crime scene?",
+                options: [
+                    "Collecting evidence",
+                    "Patient care - while protecting evidence when possible",
+                    "Taking photographs",
+                    "Securing the scene"
+                ],
+                correct: 1,
+                explanation: "Patient care is the paramedic's ultimate priority, even at crime scenes. However, evidence can be protected while caring for the patient by being careful not to disturb the scene unnecessarily."
+            },
+            {
+                number: 50,
+                text: "What should you do to preserve evidence while providing patient care?",
+                options: [
+                    "Refuse to provide care until police arrive",
+                    "Avoid unnecessary disturbance; don't move items unless necessary; preserve clothes in paper bags; minimize disruption",
+                    "Clean up the scene",
+                    "Move everything to make room"
+                ],
+                correct: 1,
+                explanation: "To preserve evidence: avoid unnecessary disturbance of the scene, don't move items unless necessary for patient care, preserve clothing in paper bags (not plastic), document observations, minimize scene disruption, and work with law enforcement."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let studentName = "";
+        let answeredQuestions = [];
+
+        function startScenario() {
+            studentName = document.getElementById('studentName').value.trim();
+            if (!studentName) {
+                alert('Please enter your name before starting.');
+                return;
+            }
+            
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showCertificate();
+                return;
+            }
+
+            const container = document.getElementById('questionsContainer');
+            const q = questions[currentQuestion];
+            
+            const questionHTML = `
+                <div class="question-container active" id="question${currentQuestion}">
+                    <div class="question">
+                        <div class="question-number">Question ${q.number} of 50</div>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options" id="options${currentQuestion}">
+                            ${q.options.map((option, index) => `
+                                <div class="option" onclick="selectAnswer(${currentQuestion}, ${index})">
+                                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                    <div>${option}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback${currentQuestion}"></div>
+                        <div class="btn-container" style="display: none;" id="nextBtn${currentQuestion}">
+                            <button class="btn" onclick="nextQuestion()">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += questionHTML;
+            updateProgress();
+        }
+
+        function selectAnswer(questionIndex, selectedIndex) {
+            const q = questions[questionIndex];
+            const options = document.querySelectorAll(`#options${questionIndex} .option`);
+            const feedback = document.getElementById(`feedback${questionIndex}`);
+            const nextBtn = document.getElementById(`nextBtn${questionIndex}`);
+            
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            const isCorrect = selectedIndex === q.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+                options[selectedIndex].classList.add('correct');
+                feedback.className = 'feedback correct show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✓ Correct!</div>
+                    <p>${q.explanation}</p>
+                `;
+            } else {
+                options[selectedIndex].classList.add('incorrect');
+                options[q.correct].classList.add('correct');
+                feedback.className = 'feedback incorrect show';
+                feedback.innerHTML = `
+                    <div class="feedback-title">✗ Incorrect</div>
+                    <p><strong>The correct answer is: ${String.fromCharCode(65 + q.correct)}) ${q.options[q.correct]}</strong></p>
+                    <p>${q.explanation}</p>
+                `;
+            }
+            
+            answeredQuestions.push({
+                question: q.number,
+                correct: isCorrect
+            });
+            
+            nextBtn.style.display = 'block';
+            updateScoreboard();
+        }
+
+        function nextQuestion() {
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progress').textContent = `${currentQuestion + 1}/50`;
+        }
+
+        function updateScoreboard() {
+            document.getElementById('correct').textContent = correctAnswers;
+            const percentage = Math.round((correctAnswers / (currentQuestion + 1)) * 100);
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function showCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date();
+            const dateString = today.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('certificate').classList.add('show');
+            document.getElementById('certName').textContent = studentName;
+            document.getElementById('certScore').textContent = percentage + '%';
+            document.getElementById('certDate').textContent = dateString;
+            
+            document.getElementById('progress').textContent = '50/50';
+            document.getElementById('correct').textContent = correctAnswers;
+            document.getElementById('score').textContent = percentage + '%';
+        }
+
+        function downloadCertificate() {
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const today = new Date().toLocaleDateString('en-US');
+            
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>EMS 210 Week 2 Certificate</title>
+                    <style>
+                        body {
+                            font-family: Georgia, serif;
+                            padding: 40px;
+                            text-align: center;
+                        }
+                        .cert-border {
+                            border: 10px double #c31432;
+                            padding: 60px;
+                            margin: 20px;
+                        }
+                        h1 { 
+                            color: #c31432; 
+                            font-size: 42px; 
+                            margin-bottom: 30px;
+                        }
+                        .student-name {
+                            font-size: 32px;
+                            font-weight: bold;
+                            color: #c31432;
+                            margin: 30px 0;
+                            border-bottom: 3px solid #c31432;
+                            display: inline-block;
+                            padding: 10px 40px;
+                        }
+                        .score {
+                            font-size: 72px;
+                            font-weight: bold;
+                            color: #28a745;
+                            margin: 40px 0;
+                        }
+                        .details {
+                            font-size: 18px;
+                            line-height: 2;
+                            margin: 20px 0;
+                        }
+                        .footer {
+                            margin-top: 60px;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="cert-border">
+                        <h1>Certificate of Completion</h1>
+                        <p class="details">This certifies that</p>
+                        <div class="student-name">${studentName}</div>
+                        <p class="details">has successfully completed</p>
+                        <p class="details"><strong>EMS 210 - Week 2 Interactive Scenario</strong></p>
+                        <p class="details">Rescue Operations & Crime Scene Awareness</p>
+                        <p class="details">Chapters 54 & 55</p>
+                        <div class="score">${percentage}%</div>
+                        <p class="details">Score: ${correctAnswers} out of 50 questions correct</p>
+                        <p class="details">${today}</p>
+                        <div class="footer">
+                            <p>This certificate should be uploaded to Canvas for credit.</p>
+                            <p>EMS 210 - EMS Operations | February 2026</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
+    </script>
+</body>
+</html>
